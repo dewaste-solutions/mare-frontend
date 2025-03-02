@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import LoginModal from "@/components/LoginModal";
 import SignupModal from "@/components/SignupModal";
 
-const HomePage = () => {
+export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
@@ -16,6 +16,4 @@ const HomePage = () => {
       )}
     </div>
   );
-};
-
-export default HomePage;
+}
