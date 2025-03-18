@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from 'next/link';
+import Image from 'next/image';
 import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
@@ -53,10 +54,10 @@ export function TaskCard() {
         <Input type="text" id="taskName" placeholder="Task Name" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
       </div>
       <div className="mb-2">
-        <label htmlFor="framework" className="block text-gray-700 text-sm font-bold mb-1">Framework</label>
+        <label htmlFor="Assignee" className="block text-gray-700 text-sm font-bold mb-1">Assignee</label>
         <Select>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a framework" />
+            <SelectValue placeholder="Select assignee" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="admin">Admin</SelectItem>
