@@ -8,7 +8,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
 
   // Hide header on login and signup pages
-  const hideHeader = pathname === "/login" || pathname === "/signup";
+  const hideHeader = pathname === "/login" || pathname === "/signup" || pathname === "/franchisee-application-form/application-form-1"
+    || pathname === "/franchisee-application-form/application-form-2" || pathname === "/franchisee-application-form/application-form-3" ||
+    pathname == "/franchisee-application-form/successful-application";
 
   return (
     <html lang="en">
