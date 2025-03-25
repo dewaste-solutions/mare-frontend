@@ -6,13 +6,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
 
 export default function AdminOnboardingFormPage() {
   const [formData, setFormData] = useState({ role: "Admin", department: "", officeLocation: "" });
   const [submitted, setSubmitted] = useState(false);
-  const router = useRouter();
-
+ 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

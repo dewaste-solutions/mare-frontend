@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";  // Using ShadCN Button component
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function LandingPage() {
   const router = useRouter();

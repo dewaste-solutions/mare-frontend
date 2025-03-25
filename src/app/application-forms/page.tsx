@@ -6,12 +6,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";  // Using ShadCN Button component
 import { Input } from "@/components/ui/input";  // Using ShadCN Input component
 import { Label } from "@/components/ui/label";  // Using ShadCN Label component
-import { useRouter } from "next/navigation";
 
 export default function ApplicationFormPage() {
   const [formData, setFormData] = useState({ name: "", email: "" });
   const [submitted, setSubmitted] = useState(false);
-  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
