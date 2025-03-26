@@ -273,13 +273,6 @@ export default function LandingPage() {
     show: { opacity: 1, y: 0 },
   }
 
-  // Custom color styles
-  const primaryColor = "#038167"
-  const primaryLightColor = "#039d7e"
-  const primaryDarkColor = "#026853"
-  const primaryVeryLightColor = "#e6f3f1"
-  const primaryVeryDarkColor = "#01574a"
-
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-white to-green-50">
       {/* Decorative Elements */}
@@ -560,7 +553,7 @@ export default function LandingPage() {
             sustainable waste management ecosystem.
           </p>
           <p className="text-lg text-gray-700">
-            We're a reverse logistics social enterprise that recovers{" "}
+            We&apos;re a reverse logistics social enterprise that recovers{" "}
             <span className="font-semibold text-[#038167]">85% of household waste</span> composition and diverts
             them for recycling/processing, not to landfills.
           </p>
@@ -762,7 +755,7 @@ export default function LandingPage() {
                         <h4 className="text-xl font-bold text-[#026853]">{testimonial.name}</h4>
                         <p className="text-sm text-gray-500">{testimonial.location}</p>
                       </div>
-                      <p className="text-lg text-gray-700 italic max-w-2xl mx-auto">"{testimonial.quote}"</p>
+                      <p className="text-lg text-gray-700 italic max-w-2xl mx-auto">&quot;{testimonial.quote}&quot;</p>
                     </motion.div>
                   ))}
                 </div>
@@ -1124,7 +1117,7 @@ export default function LandingPage() {
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">Join the MARE! Community</h2>
               <div className="w-20 h-1 bg-[#a3e0d6] rounded-full mb-6"></div>
               <p className="text-lg text-[#e6f3f1] mb-8">
-                Whether you're a community leader, a potential team member, or a franchisee, we invite you to be part of
+                Whether you&apos;re a community leader, a potential team member, or a franchisee, we invite you to be part of
                 our growing network.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1684,7 +1677,7 @@ export default function LandingPage() {
               <div className="space-y-4">
                 <p>
                   Barangay leaders play a crucial role in implementing MARE! in their communities. They provide the
-                  necessary support, resources, and policy framework to ensure the program's success.
+                  necessary support, resources, and policy framework to ensure the program&apos;s success.
                 </p>
                 <h3 className="text-lg font-semibold text-[#038167] mt-4">Role of Barangay Leaders</h3>
                 <ul className="list-disc pl-5 space-y-2">
@@ -1721,7 +1714,7 @@ export default function LandingPage() {
                 <ul className="list-disc pl-5 space-y-2">
                   <li>Profitable business opportunity with social and environmental impact</li>
                   <li>Comprehensive training and ongoing support</li>
-                  <li>Access to MARE!'s network of recyclers and processors</li>
+                  <li>Access to MARE!&apos;s network of recyclers and processors</li>
                   <li>Marketing and community engagement support</li>
                   <li>Opportunity to be a community leader in sustainability</li>
                 </ul>
@@ -1878,7 +1871,7 @@ export default function LandingPage() {
             <div className="flex items-center space-x-2">
               <Checkbox id="terms" />
               <label htmlFor="terms" className="text-sm text-gray-600">
-                I agree to MARE!'s Terms of Service and Privacy Policy
+                I agree to MARE!&apos;s Terms of Service and Privacy Policy
               </label>
             </div>
 
@@ -1935,7 +1928,7 @@ export default function LandingPage() {
             </div>
 
             <div className="mt-6">
-              <p className="text-center text-gray-600">Don't see a position that fits your skills?</p>
+            <p className="text-center text-gray-600">Don&apos;t see a position that fits your skills?</p>
               <div className="flex justify-center mt-2">
                 <Button
                   color ="outline"
@@ -1958,7 +1951,7 @@ export default function LandingPage() {
         <div className="fixed bottom-4 right-4 bg-[#038167] text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-in fade-in slide-in-from-bottom-5">
           <div className="flex items-center gap-2">
             <CheckCircle className="h-5 w-5" />
-            <p>Thank you! We'll be in touch soon.</p>
+            <p>Thank you! We&apos;ll be in touch soon.</p>
           </div>
         </div>
       )}
