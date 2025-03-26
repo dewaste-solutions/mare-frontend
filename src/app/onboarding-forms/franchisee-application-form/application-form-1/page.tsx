@@ -74,7 +74,7 @@ export default function ApplicationForm() {
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select Franchisee Type" />
                             </SelectTrigger>
-                            <SelectContent className="w-full">
+                            <SelectContent className="w-full bg-white">
                                 <SelectItem value="wasteCol">Waste Collection</SelectItem>
                                 <SelectItem value="recFal">Recycling Facility</SelectItem>
                                 <SelectItem value="compServ">Composting Service</SelectItem>
@@ -110,7 +110,7 @@ export default function ApplicationForm() {
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select Years in Operation" />
                             </SelectTrigger>
-                            <SelectContent className="w-full">
+                            <SelectContent className="w-full bg-white">
                                 <SelectItem value="year1-4">1-4 years</SelectItem>
                                 <SelectItem value="year5-7">5-7 years</SelectItem>
                                 <SelectItem value="year8-10">8 years or more</SelectItem>
