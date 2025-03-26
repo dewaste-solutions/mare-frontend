@@ -1,69 +1,157 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight, Eye, EyeOff, ChevronLeft } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-import { Mail, Lock } from "lucide-react"; // Import icons
+import Image from "next/image";
+
 
 export default function LoginPage() {
-  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const handleLogin = () => {
-    Cookies.set("user", email, { expires: 1 }); // Store user data in cookies for 1 day
-    router.push("/dashboard"); // Redirect to dashboard
+  const router = useRouter();
+
+  const goBackToPage = () => {
+    router.push("src/page"); // Change this based on the actual route
   };
 
-  return (
-    <main className="flex items-center justify-center min-h-screen bg-[#038167]">
-      <div className="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full">
-        <div className="flex justify-center mb-6">
-          <img src="/mare-logo.svg" alt="Logo" className="h-12" />
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ email, password, rememberMe });
+  };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-full max-w-md p-8">
+          <div className="animate-pulse flex flex-col space-y-4">
+            <div className="h-12 bg-gray-200 rounded"></div>
+            <div className="h-64 bg-gray-200 rounded"></div>
+          </div>
         </div>
-
-        <h1 className="text-2xl font-bold text-center mb-2">Login</h1>
-        <p className="text-center text-gray-600 text-sm mb-4">
-          Log in to track your waste and make an impact!
-        </p>
-
-        <div className="relative">
-          <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border p-3 pl-12 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-[#038167] bg-gray-100"
-          />
-        </div>
-
-        <div className="relative mt-4">
-          <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border p-3 pl-12 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-[#038167] bg-gray-100"
-          />
-        </div>
-
-        <button
-          className="bg-[#038167] text-white p-3 rounded-lg w-full mt-4 hover:bg-[#026955] transition-all"
-          onClick={handleLogin}
-        >
-          Login
-        </button>
-
-        <p className="text-center text-sm text-gray-600 mt-4">
-         
-          Don&apos;t have an account?
-          <span className="text-[#038167] cursor-pointer hover:underline" onClick={() => router.push("/signup")}>
-            Sign up here
-          </span>
-        </p>
       </div>
-    </main>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* Header */}
+      <header className="w-full py-4 px-6 border-b border-gray-200 bg-white shadow-sm">
+        <div className="container flex justify-between items-center">
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.svg" alt="MARE! Logo" width={120} height={120} priority />
+        </Link>
+          <button
+            onClick={goBackToPage}
+            className="flex items-center text-sm text-gray-600 hover:text-blue-600 transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Back to Home
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-grow flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <Card className="p-8 shadow-lg border border-gray-200 bg-white">
+              <div className="text-center mb-8">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back!</h1>
+                <p className="text-gray-600">Sign in to your MARE! account</p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4 w-full">
+              {/* Email Field */}
+              <div className="space-y-1">
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full"
+                />
+              </div>
+
+              {/* Password Field */}
+              <div className="space-y-1">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
+                <div className="relative w-full">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full pr-10"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Remember Me & Forgot Password in One Row */}
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Checkbox id="remember" checked={rememberMe} onCheckedChange={(checked) => setRememberMe(checked === true)} />
+                  <label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
+                    Remember me
+                  </label>
+                </div>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-[#038167] hover:text-[#026b52] transition-colors"
+                >
+                  Forgot password?
+                </Link>
+
+              </div>
+
+              {/* Submit Button */}
+              <Button type="submit" className="w-full bg-[#038167] hover:bg-[#026b52] text-white shadow-md flex justify-center items-center gap-2">
+                Sign In
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+
+            </form>
+            </Card>
+          </motion.div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="py-6 border-t border-gray-200 bg-white flex items-center justify-center">
+        <p className="text-xs text-gray-500 text-center">
+          © {new Date().getFullYear()} MARE! - MAterials REcovery. All rights reserved.
+        </p>
+      </footer>
+
+    </div>
   );
 }
