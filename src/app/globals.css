@@ -11,7 +11,8 @@
 }
 
 /* Center content */
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   font-family: Arial, sans-serif;
@@ -60,12 +61,36 @@ html, body {
   margin: 0 auto 10px;
 }
 
+@font-face {
+  font-family: 'TT Commons';
+  src: url('/path/to/TTCommons-Regular.woff2') format('woff2'),
+    url('/path/to/TTCommons-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Commons';
+  src: url('/path/to/TTCommons-Medium.woff2') format('woff2'),
+    url('/path/to/TTCommons-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TT Commons';
+  src: url('/path/to/TTCommons-Bold.woff2') format('woff2'),
+    url('/path/to/TTCommons-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
     width: 95%;
   }
-  
+
   .team-section {
     flex-direction: column;
     align-items: center;

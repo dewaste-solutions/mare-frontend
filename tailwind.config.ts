@@ -1,5 +1,5 @@
-// tailwind.config.ts
 import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
   content: [
@@ -9,7 +9,11 @@ const config: Config = {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'tt-commons': ['TT Commons', ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
   plugins: [],
 };
