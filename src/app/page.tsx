@@ -335,7 +335,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Button
-                size="large"
+                size="lg"
                 className="bg-white text-[#038167] hover:bg-[#e6f3f1] group transition-all duration-300 shadow-lg hover:shadow-xl"
                 onClick={handleJoinCommunity}
               >
@@ -343,7 +343,7 @@ export default function LandingPage() {
                 <ArrowRight className="ml-2 h-4 w-4 text-[#038167] group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
-                size="large"
+                size="lg"
                 color ="outline"
                 className="text-white border-white/40 hover:bg-white/10 backdrop-blur-sm"
                 onClick={() => scrollToSection("workers")}
@@ -744,7 +744,7 @@ export default function LandingPage() {
                   <p className="text-sm text-gray-600 flex-grow">{member.description}</p>
                   <Button
                     color ="ghost"
-                    size="small"
+                    size="sm"
                     className="mt-4 text-[#038167] hover:text-[#026853] hover:bg-[#e6f3f1] group"
                     onClick={() => openProfile(member)}
                   >
@@ -1044,14 +1044,14 @@ export default function LandingPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Button
-                  size="large"
+                  size="lg"
                   className="bg-white text-[#026853] hover:bg-[#e6f3f1] shadow-lg hover:shadow-xl transition-all w-full"
                   onClick={() => handleLearnMore("communities")}
                 >
                   For Communities
                 </Button>
                 <Button
-                  size="large"
+                  size="lg"
                   color ="outline"
                   className="text-white border-white/40 hover:bg-white/10 backdrop-blur-sm w-full"
                   onClick={() => handleLearnMore("workers")}
@@ -1059,7 +1059,7 @@ export default function LandingPage() {
                   For Workers
                 </Button>
                 <Button
-                  size="large"
+                  size="lg"
                   color ="outline"
                   className="text-white border-white/40 hover:bg-white/10 backdrop-blur-sm w-full"
                   onClick={() => handleLearnMore("franchisees")}

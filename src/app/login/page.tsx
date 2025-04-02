@@ -15,8 +15,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    // Explicitly type the users object
+
     const users: Record<string, string> = {
       "admin@example.com": "admin",
       "manager@example.com": "manager",
@@ -24,18 +23,29 @@ export default function LoginPage() {
       "worker@example.com": "worker",
       "community@example.com": "community-officer",
     };
-  
-    if (email in users && password === "password123") {
-      document.cookie = `authToken=valid-token; path=/; secure;`;
-      document.cookie = `userRole=${users[email]}; path=/; secure;`;
-  
-      // Redirect based on role
-      window.location.href = `/dashboard/${users[email]}`;
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (users[normalizedEmail] && password === "password123") {
+      const role = users[normalizedEmail];
+      console.log("✅ Login successful! Role:", role);
+
+      // ✅ Set role cookie properly
+      document.cookie = `role=${role}; path=/; secure;`;
+
+      // ✅ Log the redirect
+      console.log("🔄 Redirecting to:", role === "admin" ? "/dashboard/admin" : "/dashboard");
+
+      // ✅ Redirect based on role
+      if (role === "admin") {
+        window.location.href = `/dashboard/admin`;
+      } else {
+        window.location.href = `/dashboard`;
+      }
     } else {
-      alert("Invalid credentials");
+      alert("❌ Invalid credentials. Please check your email and password.");
     }
   };
-  
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-white to-green-50">
@@ -49,7 +59,7 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Email" />
               <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="Password" />
-              
+
               <div className="flex items-center space-x-2">
                 <Checkbox checked={rememberMe} onCheckedChange={(checked) => setRememberMe(checked as boolean)} />
                 <label className="text-sm">Remember me</label>

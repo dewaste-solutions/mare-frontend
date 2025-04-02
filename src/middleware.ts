@@ -1,34 +1,29 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get("authToken")?.value;
-  const role = request.cookies.get("userRole")?.value; // Get user role from cookies
+export function middleware(req: NextRequest) {
+  const role = req.cookies.get("role")?.value || null;
+  const requestedPath = req.nextUrl.pathname;
 
-  // Redirect unauthorized users to login
-  if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  console.log("🔹 Middleware Check:", { requestedPath, role });
+
+  if (!role) {
+    console.log("⛔ No role found! Redirecting to login...");
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // Define access control for each role
-  const roleAccess: { [key: string]: string[] } = {
-    admin: ["/dashboard/admin"],
-    manager: ["/dashboard/manager"],
-    franchisee: ["/dashboard/franchisee"],
-    worker: ["/dashboard/worker"],
-    "community-officer": ["/dashboard/community-officer"],
-  };
-
-  // Restrict access based on role
-  const requestedPath = request.nextUrl.pathname;
-  if (role && !roleAccess[role]?.some((path) => requestedPath.startsWith(path))) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  // ✅ Admins can access /dashboard/admin
+  if (requestedPath.startsWith("/dashboard/admin")) {
+    if (role !== "admin") {
+      console.log("⛔ Unauthorized! Only admin can access this page.");
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    return NextResponse.next(); // Admin allowed
   }
 
+  // ✅ Allow all other roles to access /dashboard
   return NextResponse.next();
 }
 
-// Protect dashboard routes
 export const config = {
   matcher: ["/dashboard/:path*"],
 };
