@@ -2,27 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const role = req.cookies.get("role")?.value || null;
-
-  // ✅ Define protected routes
-  const protectedRoutes: { [key: string]: string } = {
-    "/dashboard/admin": "admin",
-    "/dashboard/franchisee": "franchisee",
-    "/dashboard/worker": "worker",
-    "/dashboard/manager": "manager",
-    "/dashboard/community-officer": "community-officer",
-  };
-
   const requestedPath = req.nextUrl.pathname;
-  const expectedRole = protectedRoutes[requestedPath];
 
-  console.log("🔹 Middleware Check:", { requestedPath, role, expectedRole });
+  console.log("🔹 Middleware Check:", { requestedPath, role });
 
-  // ✅ Redirect user to login if role is missing or incorrect
-  if (expectedRole && role !== expectedRole) {
-    console.log("⛔ Unauthorized! Redirecting to login...");
+  if (!role) {
+    console.log("⛔ No role found! Redirecting to login...");
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
+  // ✅ Admins can access /dashboard/admin
+  if (requestedPath.startsWith("/dashboard/admin")) {
+    if (role !== "admin") {
+      console.log("⛔ Unauthorized! Only admin can access this page.");
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    return NextResponse.next(); // Admin allowed
+  }
+
+  // ✅ Allow all other roles to access /dashboard
   return NextResponse.next();
 }
 
