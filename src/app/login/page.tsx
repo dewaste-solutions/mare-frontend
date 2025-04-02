@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -49,31 +48,76 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-white to-green-50">
-      <Header />
       <main className="flex-1 flex items-center justify-center py-12">
         <div className="w-full max-w-md px-4">
-          <h1 className="text-3xl font-bold text-[#026853] mb-2 text-center">Welcome Back</h1>
-          <p className="text-gray-600 text-center">Sign in to your MARE! account</p>
+          <div className="flex justify-center mb-6">
+            <Image
+              src="logo.svg"
+              alt="MARE! Logo"
+              width={150}
+              height={100}
+              priority
+            />
+          </div>
+          
+          <h1 className="text-3xl font-bold text-[#038167] mb-2 text-center">Welcome Back</h1>
+          <p className="text-gray-600 text-center mb-6">Sign in to your MARE! account</p>
 
           <div className="bg-white p-8 rounded-xl shadow-lg">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Email" />
-              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="Password" />
-
-              <div className="flex items-center space-x-2">
-                <Checkbox checked={rememberMe} onCheckedChange={(checked) => setRememberMe(checked as boolean)} />
-                <label className="text-sm">Remember me</label>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <Input 
+                  type="email" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  required 
+                  placeholder="Enter your email"
+                  className="w-full" 
+                />
+              </div>
+              
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Password <span className="text-red-500">*</span>
+                </label>
+                <Input 
+                  type="password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  required 
+                  placeholder="Enter your password"
+                  className="w-full" 
+                />
               </div>
 
-              <Button type="submit" className="w-full bg-green-600 text-white">Sign In</Button>
+              <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center">
+                  <Checkbox 
+                    id="remember-me"
+                    checked={rememberMe} 
+                    onCheckedChange={(checked) => setRememberMe(checked as boolean)} 
+                  />
+                  <label htmlFor="remember-me" className="ml-2 text-sm text-gray-600">Remember me</label>
+                </div>
+                <Link href="/forgot-password" className="text-sm text-[#038167] hover:text-[#026853]">
+                  Forgot password?
+                </Link>
+              </div>
+
+              <Button 
+                type="submit" 
+                className="w-full bg-[#038167] hover:bg-[#026853] text-white py-2 mt-4"
+              >
+                Sign In
+              </Button>
             </form>
-            <p className="text-center text-sm mt-4">
-              Don't have an account? <Link href="/join" className="text-green-600">Sign up</Link>
-            </p>
+            
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
