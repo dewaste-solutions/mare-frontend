@@ -110,7 +110,7 @@ export default function Header({ activeSection, scrollToSection }: HeaderProps) 
               <DropdownMenuTrigger asChild>
                 <Button
                   color="outline"
-                  size="large"
+                  size="lg"
                   className="h-10 w-10 rounded-full border-[#038167]/20 hover:bg-[#038167]/5 hover:text-[#038167] transition-all"
                 >
                   <User className="h-5 w-5" />
