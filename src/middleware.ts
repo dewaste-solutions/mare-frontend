@@ -1,31 +1,34 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export function middleware(req: NextRequest) {
-  const role = req.cookies.get("role")?.value || null;
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get("authToken")?.value;
+  const role = request.cookies.get("userRole")?.value; // Get user role from cookies
 
-  // ✅ Define protected routes
-  const protectedRoutes: { [key: string]: string } = {
-    "/dashboard/admin": "admin",
-    "/dashboard/franchisee": "franchisee",
-    "/dashboard/worker": "worker",
-    "/dashboard/manager": "manager",
-    "/dashboard/community-officer": "community-officer",
+  // Redirect unauthorized users to login
+  if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Define access control for each role
+  const roleAccess: { [key: string]: string[] } = {
+    admin: ["/dashboard/admin"],
+    manager: ["/dashboard/manager"],
+    franchisee: ["/dashboard/franchisee"],
+    worker: ["/dashboard/worker"],
+    "community-officer": ["/dashboard/community-officer"],
   };
 
-  const requestedPath = req.nextUrl.pathname;
-  const expectedRole = protectedRoutes[requestedPath];
-
-  console.log("🔹 Middleware Check:", { requestedPath, role, expectedRole });
-
-  // ✅ Redirect user to login if role is missing or incorrect
-  if (expectedRole && role !== expectedRole) {
-    console.log("⛔ Unauthorized! Redirecting to login...");
-    return NextResponse.redirect(new URL("/login", req.url));
+  // Restrict access based on role
+  const requestedPath = request.nextUrl.pathname;
+  if (role && !roleAccess[role]?.some((path) => requestedPath.startsWith(path))) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
 }
 
+// Protect dashboard routes
 export const config = {
   matcher: ["/dashboard/:path*"],
 };
