@@ -170,7 +170,7 @@ export default function ApplicationForm() {
                                         name="email"
                                         type="email"
                                         placeholder="your.email@example.com"
-                                        className="w-full font-tt-commons"
+                                        className="w-full font-tt-commons text-sm border-emerald-500"
                                         value={formData.email}
                                         onChange={handleInputChange}
                                     />
@@ -185,7 +185,7 @@ export default function ApplicationForm() {
                                             id="firstName"
                                             name="firstName"
                                             placeholder="First Name"
-                                            className="w-full font-tt-commons"
+                                            className="w-full font-tt-commons text-sm border-emerald-500"
                                             value={formData.firstName}
                                             onChange={handleInputChange}
                                         />
@@ -198,7 +198,7 @@ export default function ApplicationForm() {
                                             id="middleName"
                                             name="middleName"
                                             placeholder="Middle Name (Optional)"
-                                            className="w-full font-tt-commons"
+                                            className="w-full font-tt-commons text-sm border-emerald-500"
                                             value={formData.middleName}
                                             onChange={handleInputChange}
                                         />
@@ -211,7 +211,7 @@ export default function ApplicationForm() {
                                             id="lastName"
                                             name="lastName"
                                             placeholder="Last Name"
-                                            className="w-full font-tt-commons"
+                                            className="w-full font-tt-commons text-sm border-emerald-500"
                                             value={formData.lastName}
                                             onChange={handleInputChange}
                                         />
@@ -226,7 +226,7 @@ export default function ApplicationForm() {
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant={"outline"}
-                                                className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
+                                                className={cn("w-full justify-start text-left border-emerald-500 font-normal", !date && "text-muted-foreground")}
                                             >
                                                 {date ? format(date, "PPP") : "Pick a date"}
                                                 <CalendarIcon className="ml-auto h-4 w-4" />
@@ -252,7 +252,7 @@ export default function ApplicationForm() {
                                         id="addressLine1"
                                         name="addressLine1"
                                         placeholder="House/Building Number, Street Name"
-                                        className="w-full font-tt-commons"
+                                        className="w-full font-tt-commons text-sm border-emerald-500"
                                         value={formData.addressLine1}
                                         onChange={handleInputChange}
                                     />
@@ -266,7 +266,7 @@ export default function ApplicationForm() {
                                         id="addressLine2"
                                         name="addressLine2"
                                         placeholder="Apartment, Suite, Unit, etc."
-                                        className="w-full font-tt-commons"
+                                        className="w-full font-tt-commons text-sm border-emerald-500"
                                         value={formData.addressLine2}
                                         onChange={handleInputChange}
                                     />
@@ -281,7 +281,7 @@ export default function ApplicationForm() {
                                             id="province"
                                             name="province"
                                             placeholder="Province"
-                                            className="w-full font-tt-commons"
+                                            className="w-full font-tt-commons text-sm border-emerald-500"
                                             value={formData.province}
                                             onChange={handleInputChange}
                                         />
@@ -294,7 +294,7 @@ export default function ApplicationForm() {
                                             id="city"
                                             name="city"
                                             placeholder="City / Municipality"
-                                            className="w-full font-tt-commons"
+                                            className="w-full font-tt-commons text-sm border-emerald-500"
                                             value={formData.city}
                                             onChange={handleInputChange}
                                         />
@@ -307,7 +307,7 @@ export default function ApplicationForm() {
                                             id="barangay"
                                             name="barangay"
                                             placeholder="Barangay"
-                                            className="w-full font-tt-commons"
+                                            className="w-full font-tt-commons text-sm border-emerald-500"
                                             value={formData.barangay}
                                             onChange={handleInputChange}
                                         />
@@ -324,7 +324,7 @@ export default function ApplicationForm() {
                                 id="interest"
                                 name="interest"
                                 placeholder="Ibahing ang iyong dahilan kung bakit interesado ka sa MARE! franchise"
-                                className="w-full min-h-[100px] p-2 border rounded-md font-tt-commons"
+                                className="w-full min-h-[100px] p-2 border rounded-md font-tt-commons text-sm border-emerald-500"
                                 value={formData.interest}
                                 onChange={handleInputChange}
                             />
@@ -389,7 +389,7 @@ export default function ApplicationForm() {
                                     id="locationSize"
                                     name="locationSize"
                                     placeholder="e.g., 5m x 10m"
-                                    className="w-full font-tt-commons text-sm"
+                                    className="w-full font-tt-commons text-sm border-emerald-500"
                                     value={formData.locationSize}
                                     onChange={handleInputChange}
                                 />
@@ -406,7 +406,7 @@ export default function ApplicationForm() {
                                     id="googleMapsLink"
                                     name="googleMapsLink"
                                     placeholder="https://maps.google.com/..."
-                                    className="w-full font-tt-commons text-sm"
+                                    className="w-full font-tt-commons text-sm border-emerald-500"
                                     value={formData.googleMapsLink}
                                     onChange={handleInputChange}
                                 />
@@ -492,7 +492,7 @@ export default function ApplicationForm() {
                                     id="teamMembers"
                                     name="teamMembers"
                                     placeholder="Isulat ang mga pangalan ng mga tauhan"
-                                    className="w-full min-h-[100px] p-2 border rounded-md text-sm font-tt-commons"
+                                    className="w-full min-h-[100px] p-2 border rounded-md text-sm border-emerald-500 font-tt-commons"
                                     value={formData.teamMembers}
                                     onChange={handleInputChange}
                                 />
@@ -515,7 +515,7 @@ export default function ApplicationForm() {
                                     id="communitySize"
                                     name="communitySize"
                                     placeholder="e.g., 500"
-                                    className="w-full text-sm font-tt-commons"
+                                    className="w-full font-tt-commons text-sm border-emerald-500"
                                     value={formData.communitySize}
                                     onChange={handleInputChange}
                                 />
@@ -530,7 +530,7 @@ export default function ApplicationForm() {
                                     id="communityAddress"
                                     name="communityAddress"
                                     placeholder="Isulat ang mga pangalan ng mga lugar"
-                                    className="w-full min-h-[100px] p-2 border rounded-md text-sm font-tt-commons"
+                                    className="w-full min-h-[100px] p-2 border rounded-md text-sm font-tt-commons border-emerald-500"
                                     value={formData.communityAddress}
                                     onChange={handleInputChange}
                                 />
@@ -545,7 +545,7 @@ export default function ApplicationForm() {
                                     id="nearbyBusinesses"
                                     name="nearbyBusinesses"
                                     placeholder="e.g., 20"
-                                    className="w-full text-sm font-tt-commons"
+                                    className="w-full text-sm font-tt-commons border-emerald-500"
                                     value={formData.nearbyBusinesses}
                                     onChange={handleInputChange}
                                 />
@@ -560,7 +560,7 @@ export default function ApplicationForm() {
                                     id="businessNames"
                                     name="businessNames"
                                     placeholder="Isulat ang mga pangalan at uri ng mga negosyo"
-                                    className="w-full min-h-[100px] p-2 border rounded-md text-sm font-tt-commons"
+                                    className="w-full min-h-[100px] p-2 border rounded-md text-sm font-tt-commons border-emerald-500"
                                     value={formData.businessNames}
                                     onChange={handleInputChange}
                                 />
@@ -582,7 +582,7 @@ export default function ApplicationForm() {
                                     Which documents are you uploading?
                                 </label>
                                 <Select>
-                                    <SelectTrigger className="w-full text-gray-400 p-6 font-tt-commons text-xs">
+                                    <SelectTrigger className="w-full text-gray-400 p-6 font-tt-commons text-xs border-emerald-300">
                                         <SelectValue placeholder="Select Document type" />
                                     </SelectTrigger>
                                     <SelectContent className="bg-white">
