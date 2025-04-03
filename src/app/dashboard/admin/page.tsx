@@ -28,7 +28,7 @@ import { RecordCollectionModal, AddEventModal } from "@/components/modals/dashbo
 import { Header } from "@/components/layout/header"
 
 // Import data
-import { stats, recentActivities, upcomingEvents, notifications, materialTypes } from "@/app/data/dashboard-data"
+import { stats, recentActivities, upcomingEvents, notifications, materialTypes } from "@/data/dashboard-data"
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -54,8 +54,8 @@ export default function DashboardPage() {
     }
   }
 
-  // Get activity icon
-  const getActivityIcon = (type: string) => {
+  // Get activity icon - FIX #1: Added type annotation for the 'type' parameter
+  const getActivityIcon = (type: 'collection' | 'member' | 'revenue' | 'event') => {
     switch (type) {
       case "collection":
         return <Recycle className="h-4 w-4 text-[#038167]" />
@@ -187,7 +187,7 @@ export default function DashboardPage() {
                           {recentActivities.map((activity) => (
                             <div key={activity.id} className="flex items-start gap-4">
                               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100">
-                                {getActivityIcon(activity.type)}
+                                {getActivityIcon(activity.type as 'collection' | 'member' | 'revenue' | 'event')}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-gray-800">{activity.title}</p>
@@ -256,9 +256,8 @@ export default function DashboardPage() {
                               <span className="font-medium">Progress</span>
                               <span>2,845 / 3,000 kg</span>
                             </div>
-                            <Progress value={95} className="h-2 bg-gray-300">
-                              <div className="h-full bg-[#038167]" style={{ width: '95%' }}></div>
-                            </Progress>
+                            {/* FIX #2: Removed the indicatorClassName prop */}
+                            <Progress value={95} className="h-2" />
                           </div>
 
                           <div className="p-4 bg-[#038167]/10 rounded-lg">
@@ -369,4 +368,3 @@ export default function DashboardPage() {
     </ToastProvider>
   )
 }
-
