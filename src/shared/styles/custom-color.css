@@ -1,0 +1,18 @@
+@theme {
+	--color-custom-white: #fdfefe;
+	--color-custom-green: #037961;
+	--color-custom-light-green: #5ea395;
+	--color-custom-black: #0d0f0c;
+	--color-custom-gray: #babdbd;
+	--color-custom-red: #ca2a32;
+	--color-custom-yellow: #fec536;
+	--color-custom-brown: #695f45;
+	--color-custom-lime: #96ad0d;
+	--color-custom-pink: #f27c84;
+}
+
+/* CSS debugger */
+/* * {
+    box-sizing: border-box;
+    outline: 1px solid red !important;
+  } */
