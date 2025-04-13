@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        formPrimary: 'rgba(3, 129, 103, 0.53)'
+      },
       fontFamily: {
         'tt-commons': ['TT Commons', ...defaultTheme.fontFamily.sans],
       },

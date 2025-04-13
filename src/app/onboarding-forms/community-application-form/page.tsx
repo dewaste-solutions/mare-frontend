@@ -1,714 +1,434 @@
 "use client"
 
-import * as React from "react"
-import Image from "next/image"
-import { Input } from "@/components/ui/input"
+import type React from "react"
+
+import { useState } from "react"
+import { Building2, ChevronLeft, ChevronRight, Contact, HomeIcon as HouseIcon, MapPin, User, Check, Mail, Building2Icon, Building } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Check } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Image from "next/image"
 
-// Define form steps
-const FORM_STEPS = ["Basic Information", "Community Details", "Review Information", "Verification", "Success"]
+export default function FranchiseeApplicationForm() {
+    const [currentStep, setCurrentStep] = useState(1)
+    const totalSteps = 3
+    const [formType, setFormType] = useState("homeowners")
 
-// Define types for form data
-interface FormData {
-    // Basic Information
-    email: string
-    firstName: string
-    middleName: string
-    lastName: string
-    addressLine1: string
-    addressLine2: string
-    province: string
-    city: string
-    barangay: string
-    establishmentName: string
-
-    // Community Details
-    communityType: string
-    hoaName: string
-    villageName: string
-    villageAddress: string
-    hoaOfficeAddress: string
-    hoaContactNumber: string
-    contactPerson: string
-    position: string
-    officialEmail: string
-    contactPersonNumber: string
-    contactPersonEmail: string
-}
-
-export default function CommunityApplicationForm() {
-    const [currentStep, setCurrentStep] = React.useState(0)
-    const [formData, setFormData] = React.useState<FormData>({
-        // Basic Information
-        email: "",
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        addressLine1: "",
-        addressLine2: "",
-        province: "",
-        city: "",
-        barangay: "",
-        establishmentName: "",
-
-        // Community Details
-        communityType: "hoa",
-        hoaName: "",
-        villageName: "",
-        villageAddress: "",
-        hoaOfficeAddress: "",
-        hoaContactNumber: "",
-        contactPerson: "",
-        position: "",
-        officialEmail: "",
-        contactPersonNumber: "",
-        contactPersonEmail: "",
-    })
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
-
-    const handleRadioChange = (value: string): void => {
-        setFormData((prev) => ({ ...prev, communityType: value }))
-    }
-
-    const handleNextStep = (): void => {
-        if (currentStep < FORM_STEPS.length - 1) {
+    const handleNext = () => {
+        if (currentStep < totalSteps) {
             setCurrentStep(currentStep + 1)
         }
     }
 
-    const handlePreviousStep = (): void => {
-        if (currentStep > 0) {
-            setCurrentStep((prev) => prev - 1)
-        }
+    const handleSubmit = () => {
+        // temporary function to simulate form submission
+        setCurrentStep(3)
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        handleNextStep()
-    }
-
-    const renderFormStep = () => {
-        switch (currentStep) {
-            case 0:
-                return (
-                    <div className="space-y-4">
-                        <h2 className="font-bold text-base mb-4 font-tt-commons">Basic Information</h2>
-
-                        <div className="space-y-2">
-                            <div>
-                                <Label htmlFor="email" className="text-sm font-bold font-tt-commons">
-                                    Email Address<span className="text-red-500">*</span>
-                                </Label>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="your.email@example.com"
-                                    className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <Label htmlFor="firstName" className="text-sm font-bold font-tt-commons">
-                                        First Name<span className="text-red-500">*</span>
-                                    </Label>
-                                    <Input
-                                        id="firstName"
-                                        name="firstName"
-                                        placeholder="First Name"
-                                        className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                        value={formData.firstName}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="middleName" className="text-sm font-bold font-tt-commons">
-                                        Middle Name
-                                    </Label>
-                                    <Input
-                                        id="middleName"
-                                        name="middleName"
-                                        placeholder="Middle Name (Optional)"
-                                        className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                        value={formData.middleName}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="lastName" className="text-sm font-bold font-tt-commons">
-                                        Last Name<span className="text-red-500">*</span>
-                                    </Label>
-                                    <Input
-                                        id="lastName"
-                                        name="lastName"
-                                        placeholder="Last Name"
-                                        className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                        value={formData.lastName}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <h2 className="font-bold text-base my-4 font-tt-commons">Address</h2>
-
-                                <div className="space-y-2">
-                                    <div>
-                                        <Label htmlFor="addressLine1" className="text-sm font-bold font-tt-commons">
-                                            Address Line 1<span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="addressLine1"
-                                            name="addressLine1"
-                                            placeholder="House/Building Number, Street Name"
-                                            className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                            value={formData.addressLine1}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="addressLine2" className="text-sm font-bold font-tt-commons">
-                                            Address Line 2 (Optional)
-                                        </Label>
-                                        <Input
-                                            id="addressLine2"
-                                            name="addressLine2"
-                                            placeholder="Apartment, Suite, Unit, etc."
-                                            className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                            value={formData.addressLine2}
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div>
-                                            <Label htmlFor="province" className="text-sm font-bold font-tt-commons">
-                                                Province<span className="text-red-500">*</span>
-                                            </Label>
-                                            <Input
-                                                id="province"
-                                                name="province"
-                                                placeholder="Province"
-                                                className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                                value={formData.province}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
-                                        <div>
-                                            <Label htmlFor="city" className="text-sm font-bold font-tt-commons">
-                                                City / Municipality<span className="text-red-500">*</span>
-                                            </Label>
-                                            <Input
-                                                id="city"
-                                                name="city"
-                                                placeholder="City / Municipality"
-                                                className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                                value={formData.city}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
-                                        <div>
-                                            <Label htmlFor="barangay" className="text-sm font-bold font-tt-commons">
-                                                Barangay<span className="text-red-500">*</span>
-                                            </Label>
-                                            <Input
-                                                id="barangay"
-                                                name="barangay"
-                                                placeholder="Barangay"
-                                                className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                                value={formData.barangay}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <Label htmlFor="establishmentName" className="text-sm font-bold font-tt-commons">
-                                    Name of the Community / Establishment<span className="text-red-500">*</span>
-                                </Label>
-                                <Input
-                                    id="establishmentName"
-                                    name="establishmentName"
-                                    placeholder="Community / Establishment Name"
-                                    className="w-full mt-1 text-sm font-tt-commons border-emerald-500"
-                                    value={formData.establishmentName}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )
-            case 1:
-                return (
-                    <div className="space-y-6">
-                        <h2 className="font-bold text-base font-tt-commons mt-2">Community Details</h2>
-
-                        <div className="space-y-4">
-                            <div>
-                                <Label className="text-sm block font-bold font-tt-commons mb-4 mt-2">
-                                    Community Type<span className="text-red-500">*</span>
-                                </Label>
-                                <RadioGroup
-                                    value={formData.communityType}
-                                    onValueChange={handleRadioChange}
-                                    className="flex flex-col space-y-2"
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="hoa" id="hoa" />
-                                        <Label htmlFor="hoa" className="cursor-pointer text-sm font-bold font-tt-commons">
-                                            Homeowners Association (HOA)
-                                        </Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="commercial" id="commercial" />
-                                        <Label htmlFor="commercial" className="cursor-pointer text-sm font-bold font-tt-commons">
-                                            Commercial Establishment
-                                        </Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="both" id="both" />
-                                        <Label htmlFor="both" className="cursor-pointer text-sm font-bold font-tt-commons">
-                                            Both
-                                        </Label>
-                                    </div>
-                                </RadioGroup>
-                            </div>
-
-                            <div className="space-y-4 mt-6">
-                                <h3 className="text-sm font-bold font-tt-commons">Homeowners Association (HOA) Details</h3>
-
-                                <div>
-                                    <Label htmlFor="hoaName" className="text-sm font-semibold font-tt-commons">
-                                        Name of the HOA<span className="text-red-500">*</span>
-                                    </Label>
-                                    <Input
-                                        id="hoaName"
-                                        name="hoaName"
-                                        placeholder="HOA Name"
-                                        className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                        value={formData.hoaName}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="villageName" className="text-sm font-bold font-tt-commons">
-                                        Name of the subdivision or village<span className="text-red-500">*</span>
-                                    </Label>
-                                    <Input
-                                        id="villageName"
-                                        name="villageName"
-                                        placeholder="Subdivision/Village Name"
-                                        className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                        value={formData.villageName}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="villageAddress" className="text-sm font-bold font-tt-commons">
-                                        Address of the subdivision or village<span className="text-red-500">*</span>
-                                    </Label>
-                                    <Input
-                                        id="villageAddress"
-                                        name="villageAddress"
-                                        placeholder="Subdivision/Village Address"
-                                        className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                        value={formData.villageAddress}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="hoaOfficeAddress" className="text-base font-tt-commons font-bold">
-                                        HOA Office Address (if applicable)<span className="text-red-500">*</span>
-                                    </Label>
-                                    <Input
-                                        id="hoaOfficeAddress"
-                                        name="hoaOfficeAddress"
-                                        placeholder="Subdivision/Village Address"
-                                        className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                        value={formData.hoaOfficeAddress}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <Label htmlFor="hoaContactNumber" className="text-base font-tt-commons font-bold">
-                                            Contact number of HOA Office<span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="hoaContactNumber"
-                                            name="hoaContactNumber"
-                                            placeholder="Contact Number"
-                                            className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                            value={formData.hoaContactNumber}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="contactPerson" className="text-base font-tt-commons font-bold">
-                                            Name of contact person<span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="contactPerson"
-                                            name="contactPerson"
-                                            placeholder="Contact Person"
-                                            className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                            value={formData.contactPerson}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <Label htmlFor="position" className="text-base font-tt-commons font-bold">
-                                            Position<span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="position"
-                                            name="position"
-                                            placeholder="Position"
-                                            className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                            value={formData.position}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="officialEmail" className="text-base font-tt-commons font-bold">
-                                            Official email address<span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="officialEmail"
-                                            name="officialEmail"
-                                            placeholder="Email Address"
-                                            className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                            value={formData.officialEmail}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <Label htmlFor="contactPersonNumber" className="text-base font-tt-commons font-bold">
-                                            Contact number of the contact person<span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="contactPersonNumber"
-                                            name="contactPersonNumber"
-                                            placeholder="Contact Number"
-                                            className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                            value={formData.contactPersonNumber}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="contactPersonEmail" className="text-base font-tt-commons font-bold">
-                                            Email address of the contact person<span className="text-red-500">*</span>
-                                        </Label>
-                                        <Input
-                                            id="contactPersonEmail"
-                                            name="contactPersonEmail"
-                                            placeholder="Email Address"
-                                            className="w-full mt-1 text-xs font-tt-commons border-emerald-500"
-                                            value={formData.contactPersonEmail}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            case 2:
-                return (
-                    <div className="space-y-6">
-                        <h2 className="font-medium text-lg mb-4">Review Your Information</h2>
-
-                        <div className="bg-gray-50 p-4 rounded-lg space-y-6">
-                            <div>
-                                <h3 className="font-medium mb-2">Basic Information</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm">
-                                    <div>
-                                        <span className="text-gray-500">Email:</span>
-                                        <p>{formData.email}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">Name:</span>
-                                        <p>{`${formData.firstName} ${formData.middleName ? formData.middleName + " " : ""}${formData.lastName}`}</p>
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <span className="text-gray-500">Address:</span>
-                                        <p>{formData.addressLine1}</p>
-                                        {formData.addressLine2 && <p>{formData.addressLine2}</p>}
-                                        <p>{`${formData.city}, ${formData.province}`}</p>
-                                        <p>{formData.barangay}</p>
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <span className="text-gray-500">Community/Establishment Name:</span>
-                                        <p>{formData.establishmentName}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h3 className="font-medium mb-2">Homeowners Association Details</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm">
-                                    <div>
-                                        <span className="text-gray-500">HOA Name:</span>
-                                        <p>{formData.hoaName}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">Subdivision/Village Name:</span>
-                                        <p>{formData.villageName}</p>
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <span className="text-gray-500">Subdivision/Village Address:</span>
-                                        <p>{formData.villageAddress}</p>
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <span className="text-gray-500">HOA Office Address:</span>
-                                        <p>{formData.hoaOfficeAddress}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">HOA Contact Number:</span>
-                                        <p>{formData.hoaContactNumber}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">HOA Email:</span>
-                                        <p>{formData.officialEmail}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">Contact Person:</span>
-                                        <p>{formData.contactPerson}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">Position:</span>
-                                        <p>{formData.position}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">Contact Person Number:</span>
-                                        <p>{formData.contactPersonNumber}</p>
-                                    </div>
-                                    <div>
-                                        <span className="text-gray-500">Contact Person Email:</span>
-                                        <p>{formData.contactPersonEmail}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            case 3:
-                return (
-                    <div className="space-y-6">
-                        <h2 className="font-medium text-lg mb-4">Review Your Information</h2>
-
-                        <div className="space-y-6">
-                            <div className="bg-gray-50 p-6 rounded-lg">
-                                <h3 className="font-medium text-base mb-4">Basic Information</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <p className="text-sm text-gray-500">Email Address</p>
-                                        <p className="text-sm font-medium">{formData.email}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Name</p>
-                                        <p className="text-sm font-medium">{`${formData.firstName} ${formData.middleName ? formData.middleName + " " : ""}${formData.lastName}`}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Address</p>
-                                        <p className="text-sm font-medium">{formData.addressLine1}</p>
-                                        {formData.addressLine2 && <p className="text-sm font-medium">{formData.addressLine2}</p>}
-                                        <p className="text-sm font-medium">{`${formData.city}, ${formData.province}`}</p>
-                                        <p className="text-sm font-medium">{formData.barangay}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Community/Establishment Name</p>
-                                        <p className="text-sm font-medium">{formData.establishmentName}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="bg-gray-50 p-6 rounded-lg">
-                                <h3 className="font-medium text-base mb-4">Homeowners Association Details</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <p className="text-sm text-gray-500">HOA Name</p>
-                                        <p className="text-sm font-medium">{formData.hoaName}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Subdivision/Village Name</p>
-                                        <p className="text-sm font-medium">{formData.villageName}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Subdivision/Village Address</p>
-                                        <p className="text-sm font-medium">{formData.villageAddress}</p>
-                                        <p className="text-sm font-medium">{`${formData.city}, ${formData.province}`}</p>
-                                        <p className="text-sm font-medium">{formData.barangay}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">HOA Office Address</p>
-                                        <p className="text-sm font-medium">{formData.hoaOfficeAddress}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">HOA Contact Number</p>
-                                        <p className="text-sm font-medium">{formData.hoaContactNumber}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">HOA Email</p>
-                                        <p className="text-sm font-medium">{formData.officialEmail}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Contact Person</p>
-                                        <p className="text-sm font-medium">{formData.contactPerson}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Position</p>
-                                        <p className="text-sm font-medium">{formData.position}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Contact Person Number</p>
-                                        <p className="text-sm font-medium">{formData.contactPersonNumber}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Contact Person Email</p>
-                                        <p className="text-sm font-medium">{formData.contactPersonEmail}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            case 4:
-                return (
-                    <div className="flex flex-col items-center justify-center py-8">
-                        <div className="w-200 h-300 flex items-center justify-center mb-6">
-                            <Image
-                                src="/complete-logo.png?height=300&width=200"
-                                alt="Success!"
-                                width={200}
-                                height={300}
-                                className="mb-4"
-                            />
-                        </div>
-                        <h2 className="text-2xl font-bold text-center mb-4">Account created successfully!</h2>
-                        <p className="text-center text-gray-600 max-w-md">
-                            Thank you for applying to become a MARE! franchise partner. Your application is under review. You will
-                            receive an update via email once a decision is made.
-                        </p>
-                    </div>
-                )
-            default:
-                return null
+    const handlePrevious = () => {
+        if (currentStep > 1) {
+            setCurrentStep(currentStep - 1)
         }
     }
 
     return (
-        <div className="min-h-screen bg-[#00856F] flex items-center justify-center p-4">
-            <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="p-6 md:p-8">
-                    {/* Logo and Header */}
-                    <div className="flex flex-col items-center mb-6">
-                        <Image
-                            src="/mare-logo.svg?height=100&width=200"
-                            alt="MARE! Logo"
-                            width={200}
-                            height={100}
-                            className="mb-4"
-                        />
-                        <h1 className="text-2xl font-bold text-center text-gray-800 -mt-2">
-                            {currentStep === 4 ? "Account created successfully!" : "Community Application Form"}
-                        </h1>
-                        {currentStep < 4 && (
-                            <p className="text-center text-gray-500 mt-1">
-                                Empowering communities to engage in responsible waste management.
-                            </p>
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
+            <div className="flex flex-col items-center mb-8">
+                <Image src="/mare-logo.svg?height=300&width=200" alt="MARE!" width={200} height={80} className="mb-2" />
+                <h1 className="text-2xl font-bold text-center font-tt-commons">Franchisee Community Form</h1>
+                <p className="text-gray-500 text-center font-tt-commons">
+                    Empowering communities to engage in responsible waste management.
+                </p>
+            </div>
+
+            {/* Progress Bar */}
+            {currentStep < 3 && (
+                <div className="mb-8">
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-bold font-tt-commons">
+                            Step {currentStep} of {totalSteps - 1}: {getStepName(currentStep)}
+                        </span>
+                    </div>
+                    <div className="relative">
+                        <div className="h-2 bg-gray-200 rounded-full">
+                            <div
+                                className="h-2 bg-red-300 rounded-full transition-all duration-300"
+                                style={{ width: `${(currentStep / (totalSteps - 1)) * 100}%` }}
+                            ></div>
+                        </div>
+                        <div className="flex justify-between absolute -top-2 w-full">
+                            {Array.from({ length: totalSteps - 1 }).map((_, index) => (
+                                <div
+                                    key={index}
+                                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs bg-yellow-400 text-white
+                  ${index + 1 <= currentStep ? "bg-red-300" : "bg-gray-200"}`}
+                                >
+                                    {index + 1}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Form Content */}
+            <div className="bg-white rounded-lg border p-6">
+                {renderFormStep(currentStep, formType, setFormType)}
+
+                {/* Navigation Buttons */}
+                {currentStep !== 3 && (
+                    <div className="flex justify-between mt-8">
+                        <Button
+                            variant="outline"
+                            onClick={handlePrevious}
+                            disabled={currentStep === 1}
+                            className="flex items-center gap-2"
+                        >
+                            <ChevronLeft className="h-4 w-4 shaadow-lg" /> Previous
+                        </Button>
+
+                        {currentStep === 2 ? (
+                            <Button onClick={handleSubmit} className="bg-red-300 hover:bg-red-400 text-white flex items-center gap-2 shadow-lg">
+                                Submit Application
+                            </Button>
+                        ) : (
+                            <Button onClick={handleNext} className="bg-red-300 hover:bg-red-400 text-white flex items-center gap-2 shadow-lg">
+                                Next <ChevronRight className="h-4 w-4" />
+                            </Button>
                         )}
                     </div>
-
-                    {/* Progress Bar */}
-                    {currentStep < 4 && (
-                        <div className="w-full bg-gray-200 h-2 rounded-full mb-8">
-                            <div
-                                className="bg-[#00856F] h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${((currentStep + 1) / (FORM_STEPS.length - 1)) * 100}%` }}
-                            />
-                        </div>
-                    )}
-
-                    {/* Form Content */}
-                    <form onSubmit={handleSubmit}>
-                        {renderFormStep()}
-
-                        {/* Navigation Buttons */}
-                        <div className={cn("flex justify-between mt-8", currentStep === 4 && "hidden")}>
-                            {currentStep > 0 && currentStep < 4 ? (
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={handlePreviousStep}
-                                    className="text-emerald-700 border-emerald-500"
-                                >
-                                    Previous
-                                </Button>
-                            ) : (
-                                <div></div>
-                            )}
-
-                            {currentStep < 3 ? (
-                                <Button
-                                    type="button"
-                                    onClick={handleNextStep}
-                                    className="bg-[#00856F] hover:bg-[#006F5C] text-white px-9"
-                                >
-                                    Next
-                                </Button>
-                            ) : currentStep === 3 ? (
-                                <Button type="submit" className="bg-[#00856F] hover:bg-[#006F5C]">
-                                    Submit
-                                </Button>
-                            ) : null}
-                        </div>
-                    </form>
-                </div>
+                )}
             </div>
         </div>
     )
 }
 
+function getStepName(step: number): string {
+    switch (step) {
+        case 1:
+            return "Basic Information"
+        case 2:
+            return "Community Details"
+        case 3:
+            return "Success"
+        default:
+            return ""
+    }
+}
+
+function renderFormStep(step: number, formType: string, setFormType: (type: string) => void) {
+    switch (step) {
+        case 1:
+            return <BasicInformationStep />
+        case 2:
+            return <CommunityDetailsStep formType={formType} setFormType={setFormType} />
+        case 3:
+            return <SuccessStep />
+        default:
+            return null
+    }
+}
+
+function StepHeader({ title, icon }: { title: string; icon: React.ReactNode }) {
+    return (
+        <div className="bg-red-100 p-4 rounded-lg mb-6 flex items-center gap-2 text-teal-600">
+            {icon}
+            <h2 className="font-semibold text-teal-600">{title}</h2>
+        </div>
+    )
+}
+
+function SectionCard({
+    title,
+    icon,
+    children,
+}: {
+    title: string
+    icon: React.ReactNode
+    children: React.ReactNode
+}) {
+    return (
+        <div className="mb-6 bg-red-50 rounded-lg p-4">
+            <div className="pb-2">
+                <h3 className="text-base flex items-center gap-2 font-semibold text-teal-600">
+                    {icon}
+                    {title}
+                </h3>
+            </div>
+            <div className="p-4 rounded-lg">{children}</div> {/* Removed bg-white */}
+        </div>
+    )
+}
+
+function BasicInformationStep() {
+    return (
+        <div>
+            <StepHeader title="Basic Information" icon={<User className="h-5 w-5" />} />
+
+            <SectionCard
+                title="Personal Information"
+                icon={<User className="h-4 w-4 text-teal-600" />}
+            >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-tt-commons">
+                    <div>
+                        <Label htmlFor="firstName">First Name</Label>
+                        <Input id="firstName" placeholder="First Name" className="text-sm font-normal mt-1 shadow-lg w-full" />
+                    </div>
+                    <div>
+                        <Label htmlFor="middleName">Middle Name</Label>
+                        <Input id="middleName" placeholder="Middle Name" className="text-sm font-normal mt-1 shadow-lg w-full" />
+                    </div>
+                    <div>
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <Input id="lastName" placeholder="Last Name" className="text-sm font-normal mt-1 shadow-lg w-full" />
+                    </div>
+                </div>
+            </SectionCard>
+
+            <SectionCard title="Contact Information" icon={<Mail className="h-4 w-4 text-teal-600" />}>
+                <div className="font-tt-commons">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input
+                        id="email"
+                        type="email"
+                        placeholder="your.email@example.com"
+                        className="mt-1 text-sm font-normal shadow-lg w-full"
+                    />
+                </div>
+            </SectionCard>
+
+            <SectionCard title="Address" icon={<MapPin className="h-4 w-4 text-teal-600" />}>
+                <div className="space-y-2 font-tt-commons">
+                    <div>
+                        <Label htmlFor="addressLine1">Address Line 1</Label>
+                        <Input
+                            id="addressLine1"
+                            placeholder="Street address, P.O box, company name"
+                            className="mt-1 text-sm font-normal shadow-lg w-full"
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="addressLine2">Address Line 2</Label>
+                        <Input
+                            id="addressLine2"
+                            placeholder="Apartment, suite, unit, building, floor, etc."
+                            className="mt-1 text-sm font-normal shadow-lg w-full"
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <Label htmlFor="province">Province</Label>
+                            <Input id="province" placeholder="Province" className="mt-1 text-sm font-normal shadow-lg w-full" />
+                        </div>
+                        <div>
+                            <Label htmlFor="city">City / Municipality</Label>
+                            <Input id="city" placeholder="City / Municipality" className="mt-1 text-sm font-normal shadow-lg w-full" />
+                        </div>
+                        <div>
+                            <Label htmlFor="barangay">Barangay</Label>
+                            <Input id="barangay" placeholder="Barangay" className="mt-1 text-sm font-normal shadow-lg w-full" />
+                        </div>
+                    </div>
+                </div>
+            </SectionCard>
+
+            <SectionCard title="Community Information" icon={<Building2 className="h-4 w-4 text-teal-600" />}>
+                <div>
+                    <Label htmlFor="communityName">Name of the Community / Establishment</Label>
+                    <Input id="communityName" placeholder="Community Name" className="mt-1 text-sm font-normal shadow-lg w-full" />
+                    <p className="text-xs text-gray-500 mt-1">Enter the name of your community or establishment</p>
+                </div>
+            </SectionCard>
+        </div>
+    )
+}
+
+function CommunityDetailsStep({ formType, setFormType }: { formType: string; setFormType: (type: string) => void }) {
+    return (
+        <div>
+            <StepHeader title="Community Details" icon={<Building className="h-5 w-5" />} />
+
+            <div className="mb-6">
+                <Tabs defaultValue={formType} onValueChange={setFormType} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="homeowners" className={`${formType === "homeowners" ? "bg-emerald-700 text-white" : ""}`}>
+                            Homeowners Association
+                        </TabsTrigger>
+                        <TabsTrigger value="commercial" className={`${formType === "commercial" ? "bg-emerald-700 text-white" : ""}`}>
+                            Commercial Establishment
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="homeowners">
+                        <SectionCard title="HOA Information" icon={<Building2Icon className="h-4 w-4 text-teal-600" />}>
+                            <div className="space-y-4 font-tt-commons">
+                                <div>
+                                    <Label htmlFor="hoaName">Name of the HOA</Label>
+                                    <Input id="hoaName" placeholder="HOA Name" className="mt-1 text-sm font-normal w-full" />
+                                </div>
+                                <div>
+                                    <Label htmlFor="subdivisionName">Name of the subdivision or village</Label>
+                                    <Input
+                                        id="subdivisionName"
+                                        placeholder="Subdivision Name"
+                                        className="mt-1 text-sm font-normal w-full"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="subdivisionAddress">Address of the subdivision or village</Label>
+                                    <Input
+                                        id="subdivisionAddress"
+                                        placeholder="Subdivision Address"
+                                        className="mt-1 text-sm font-normal w-full"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="hoaOfficeAddress">HOA Office Address (if applicable)</Label>
+                                    <Input
+                                        id="hoaOfficeAddress"
+                                        placeholder="HOA Office Address"
+                                        className="mt-1 text-sm font-normal w-full"
+                                    />
+                                </div>
+                            </div>
+                        </SectionCard>
+
+                        <SectionCard title="HOA Contact Information" icon={<Contact className="h-4 w-4 text-teal-600" />}>
+                            <div className="space-y-4 font-tt-commons">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <Label htmlFor="hoaContactNumber">Contact number of HOA Office</Label>
+                                        <Input
+                                            id="hoaContactNumber"
+                                            placeholder="Contact Number"
+                                            className="mt-1 text-sm font-normal w-full"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="hoaEmail">Official email address</Label>
+                                        <Input id="hoaEmail" placeholder="Email Address" className="mt-1 text-sm font-normal w-full" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <Label htmlFor="contactPerson">Name of contact person</Label>
+                                    <Input id="contactPerson" placeholder="Contact Person" className="mt-1 text-sm font-normal w-full" />
+                                </div>
+                                <div>
+                                    <Label htmlFor="position">Position</Label>
+                                    <Input id="position" placeholder="Position" className="mt-1 text-sm font-normal w-full" />
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <Label htmlFor="contactPersonNumber">Contact number of the contact person</Label>
+                                        <Input
+                                            id="contactPersonNumber"
+                                            placeholder="Contact Number"
+                                            className="mt-1 text-sm font-normal w-full"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="contactPersonEmail">Email address of the contact person</Label>
+                                        <Input
+                                            id="contactPersonEmail"
+                                            placeholder="Email Address"
+                                            className="mt-1 text-sm font-normal w-full"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </SectionCard>
+                    </TabsContent>
+                    <TabsContent value="commercial">
+                        <SectionCard title="Establishment Information" icon={<Building2 className="h-4 w-4 text-teal-600" />}>
+                            <div className="space-y-4 font-tt-commons">
+                                <div>
+                                    <Label htmlFor="establishmentName">Name of the commercial establishment</Label>
+                                    <Input
+                                        id="establishmentName"
+                                        placeholder="Establishment Name"
+                                        className="mt-1 text-sm font-normal w-full"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="establishmentAddress">Address of the commercial establishment</Label>
+                                    <Input
+                                        id="establishmentAddress"
+                                        placeholder="Establishment Address"
+                                        className="mt-1 text-sm font-normal w-full"
+                                    />
+                                </div>
+                            </div>
+                        </SectionCard>
+
+                        <SectionCard
+                            title="Establishment Contact Information"
+                            icon={<Contact className="h-4 w-4 text-teal-600" />}
+                        >
+                            <div className="space-y-4 font-tt-commons">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <Label htmlFor="establishmentContactNumber">Contact number of the commercial establishment</Label>
+                                        <Input
+                                            id="establishmentContactNumber"
+                                            placeholder="Contact Number"
+                                            className="mt-1 text-sm font-normal w-full"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="establishmentEmail">Official email address</Label>
+                                        <Input
+                                            id="establishmentEmail"
+                                            placeholder="Email Address"
+                                            className="mt-1 text-sm font-normal w-full"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <Label htmlFor="contactPerson">Name of contact person</Label>
+                                    <Input id="contactPerson" placeholder="Contact Person" className="mt-1 text-sm font-normal w-full" />
+                                </div>
+                                <div>
+                                    <Label htmlFor="position">Position</Label>
+                                    <Input id="position" placeholder="Position" className="mt-1 text-sm font-normal w-full" />
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <Label htmlFor="contactPersonNumber">Contact number of the contact person</Label>
+                                        <Input
+                                            id="contactPersonNumber"
+                                            placeholder="Contact Number"
+                                            className="mt-1 text-sm font-normal w-full"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="contactPersonEmail">Email address of the contact person</Label>
+                                        <Input
+                                            id="contactPersonEmail"
+                                            placeholder="Email Address"
+                                            className="mt-1 text-sm font-normal w-full"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </SectionCard>
+                    </TabsContent>
+                </Tabs>
+            </div>
+        </div>
+    )
+}
+
+function SuccessStep() {
+    return (
+        <div className="flex flex-col items-center justify-center font-tt-commons py-10">
+            <div className="mb-6">
+                <Image src="/complete-logo.png" alt="Success!" width={150} height={150} />
+            </div>
+            <h2 className="text-2xl font-bold mb-4 text-center">Application Successfully Submitted!</h2>
+            <p className="text-gray-600 text-center max-w-md">
+                Thank you for applying to become a MARE! franchise partner. Your application is under review. You will receive
+                an update via email once a decision is made.
+            </p>
+        </div>
+    )
+}
