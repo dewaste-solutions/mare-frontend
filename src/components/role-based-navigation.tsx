@@ -10,11 +10,14 @@ import {
   Mail,
   FileText,
   Calendar,
-  Building,
   Map,
   Truck,
   UserCog,
   BadgeCheck,
+  BadgePercent,
+  ShoppingCart,
+  Ticket,
+  Cog,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -55,29 +58,11 @@ export function RoleBasedNavigation({
             MARE!
           </span>
         </Link>
-        <div className="mt-2 text-xs text-gray-500">
-          Logged in as <span className="font-medium capitalize">{role.replace("-", " ")}</span>
-        </div>
+      
       </div>
 
       <nav className="flex-1 p-4 overflow-y-auto">
-        <div className="mb-2 px-2 text-xs font-semibold text-gray-400 uppercase">Main</div>
-
-        {/* Role-specific dashboard link */}
-        <ul className="space-y-1">
-          <li>
-            <Link
-              href={`/${role}/dashboard`}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md ${
-                isActive(`/${role}/dashboard`) ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
-              }`}
-              onClick={handleLinkClick}
-            >
-              <BarChart3 className="h-5 w-5" />
-              <span>Dashboard</span>
-            </Link>
-          </li>
-        </ul>
+        
 
         {/* Franchisee specific navigation */}
         {role === "franchisee" && (
@@ -206,11 +191,51 @@ export function RoleBasedNavigation({
           </>
         )}
 
-        {/* Admin specific navigation */}
+        {/* Admin specific navigation - UPDATED with unified navigation */}
         {role === "admin" && (
           <>
             <div className="mt-6 mb-2 px-2 text-xs font-semibold text-gray-400 uppercase">Administration</div>
             <ul className="space-y-1">
+              <li>
+                <Link
+                  href="/admin/analytics"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/analytics") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <BarChart3 className="h-5 w-5" />
+                  <span>Dashboard</span>
+                </Link>
+              </li>
+
+              {/* User Management Section */}
+              <li>
+                <Link
+                  href="/admin/user-management"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/user-management") || pathname.includes("/admin/user-management")
+                      ? "bg-[#e6f3f1] text-[#038167]"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <UserCog className="h-5 w-5" />
+                  <span>User Management</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/invites"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/invites") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <Mail className="h-5 w-5" />
+                  <span>Invitations</span>
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/admin/applications"
@@ -224,18 +249,111 @@ export function RoleBasedNavigation({
                   <Badge className="ml-auto bg-[#038167]">5</Badge>
                 </Link>
               </li>
+
+              {/* Location & Scheduling Section */}
               <li>
                 <Link
-                  href="/admin/invites"
+                  href="/admin/barangay-settings"
                   className={`flex items-center gap-3 px-3 py-2 rounded-md ${
-                    isActive("/admin/invites")
+                    isActive("/admin/barangay-settings") || pathname.includes("/admin/barangay")
                       ? "bg-[#e6f3f1] text-[#038167]"
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                   onClick={handleLinkClick}
                 >
-                  <UserCog className="h-5 w-5" />
-                  <span>Invites</span>
+                  <Map className="h-5 w-5" />
+                  <span>Barangay Settings</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/schedules"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/schedules") || pathname.includes("/admin/routes")
+                      ? "bg-[#e6f3f1] text-[#038167]"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <Calendar className="h-5 w-5" />
+                  <span>Schedule & Routes</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/gps-tracking"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/gps-tracking") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <Truck className="h-5 w-5" />
+                  <span>GPS Tracking</span>
+                </Link>
+              </li>
+
+              {/* Materials & Sales Section */}
+              <li>
+                <Link
+                  href="/admin/materials"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/materials") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <Recycle className="h-5 w-5" />
+                  <span>Materials & Pricing</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/offers"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/offers") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <BadgePercent className="h-5 w-5" />
+                  <span>Offers & Coupons</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/sales"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/sales") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  <span>Sales Matching</span>
+                </Link>
+              </li>
+
+              {/* Support & Reporting Section */}
+              <li>
+                <Link
+                  href="/admin/complaints"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/complaints") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <Ticket className="h-5 w-5" />
+                  <span>Complaint Ticketing</span>
+                  <Badge className="ml-auto bg-[#038167]">3</Badge>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/reports"
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md ${
+                    isActive("/admin/reports") ? "bg-[#e6f3f1] text-[#038167]" : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                  onClick={handleLinkClick}
+                >
+                  <FileText className="h-5 w-5" />
+                  <span>Reports & Exports</span>
                 </Link>
               </li>
             </ul>

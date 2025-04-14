@@ -187,7 +187,3 @@ function useToast() {
 }
 
 export { useToast, toast }
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes

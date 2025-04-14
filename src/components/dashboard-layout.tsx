@@ -87,16 +87,7 @@ export function DashboardLayout({
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
-                <div className="flex items-center gap-2">
-                  <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#038167] to-[#026853] text-white shadow-lg">
-                    <span className="text-xs font-medium">
-                      {role === "franchisee" ? "F" : role === "community-officer" ? "CO" : "A"}
-                    </span>
-                  </div>
-                  <span className="text-lg font-bold bg-gradient-to-r from-[#038167] to-[#026853] bg-clip-text text-transparent">
-                    MARE!
-                  </span>
-                </div>
+               
               </div>
 
               <div className="relative w-full max-w-md hidden md:block">

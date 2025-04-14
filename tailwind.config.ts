@@ -1,14 +1,3 @@
-<<<<<<< Updated upstream
-// tailwind.config.ts
-import type { Config } from "tailwindcss";
-
-const config: Config = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-=======
 import type { Config } from "tailwindcss"
 
 const config = {
@@ -19,18 +8,9 @@ const config = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
     "*.{js,ts,jsx,tsx,mdx}",
->>>>>>> Stashed changes
   ],
   prefix: "",
   theme: {
-<<<<<<< Updated upstream
-    extend: {},
-  },
-  plugins: [],
-};
-
-export default config;
-=======
     container: {
       center: true,
       padding: "2rem",
@@ -133,4 +113,3 @@ export default config;
 } satisfies Config
 
 export default config
->>>>>>> Stashed changes
