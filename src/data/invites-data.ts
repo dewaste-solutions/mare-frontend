@@ -71,5 +71,8 @@ export const invites = [
       read: true,
     },
   ]
+<<<<<<< Updated upstream
   
+=======
+>>>>>>> Stashed changes
   

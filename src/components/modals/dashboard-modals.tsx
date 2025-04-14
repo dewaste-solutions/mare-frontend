@@ -31,7 +31,11 @@ export function RecordCollectionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+<<<<<<< Updated upstream
       <DialogContent className="sm:max-w-[500px]">
+=======
+      <DialogContent className="sm:max-w-[500px] bg-white">
+>>>>>>> Stashed changes
         <DialogHeader>
           <DialogTitle>Record Collection</DialogTitle>
           <DialogDescription>Add a new waste collection record</DialogDescription>
@@ -56,7 +60,11 @@ export function RecordCollectionModal({
             <Label htmlFor="date">Collection Date</Label>
             <Popover>
               <PopoverTrigger asChild>
+<<<<<<< Updated upstream
                 <Button color="outline" className="w-full justify-start text-left font-normal">
+=======
+                <Button variant="outline" className="w-full justify-start text-left font-normal">
+>>>>>>> Stashed changes
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date ? format(date, "PPP") : <span>Select date</span>}
                 </Button>
@@ -101,7 +109,11 @@ export function RecordCollectionModal({
         </div>
 
         <DialogFooter>
+<<<<<<< Updated upstream
           <Button color="outline" onClick={() => onOpenChange(false)}>
+=======
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+>>>>>>> Stashed changes
             Cancel
           </Button>
           <Button className="bg-primary-500 hover:bg-primary-600 text-white">Save Record</Button>
@@ -123,7 +135,11 @@ export function AddEventModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+<<<<<<< Updated upstream
       <DialogContent className="sm:max-w-[500px]">
+=======
+      <DialogContent className="sm:max-w-[500px] bg-white">
+>>>>>>> Stashed changes
         <DialogHeader>
           <DialogTitle>Add Event</DialogTitle>
           <DialogDescription>Schedule a new community event</DialogDescription>
@@ -139,7 +155,11 @@ export function AddEventModal({
             <Label htmlFor="date">Event Date</Label>
             <Popover>
               <PopoverTrigger asChild>
+<<<<<<< Updated upstream
                 <Button color="outline" className="w-full justify-start text-left font-normal">
+=======
+                <Button variant="outline" className="w-full justify-start text-left font-normal">
+>>>>>>> Stashed changes
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date ? format(date, "PPP") : <span>Select date</span>}
                 </Button>
@@ -173,7 +193,11 @@ export function AddEventModal({
         </div>
 
         <DialogFooter>
+<<<<<<< Updated upstream
           <Button color="outline" onClick={() => onOpenChange(false)}>
+=======
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+>>>>>>> Stashed changes
             Cancel
           </Button>
           <Button className="bg-primary-500 hover:bg-primary-600 text-white">Save Event</Button>
@@ -182,4 +206,7 @@ export function AddEventModal({
     </Dialog>
   )
 }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
