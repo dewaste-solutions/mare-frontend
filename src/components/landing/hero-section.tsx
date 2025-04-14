@@ -1,18 +1,36 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useEffect, useState } from "react"; // Importing useState and useEffect hooks
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Recycle, Users } from "lucide-react";
 
 interface HeroSectionProps {
-  onJoinCommunity: () => void
-  onMeetTeam: () => void
+  onJoinCommunity: () => void;
+  onMeetTeam: () => void;
 }
 
 export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
+  // State for storing floating circle styles
+  const [circles, setCircles] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Generate circles after component mounts
+    const generatedCircles = Array.from({ length: 20 }).map(() => ({
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      width: `${Math.random() * 10 + 5}px`,
+      height: `${Math.random() * 10 + 5}px`,
+      opacity: Math.random() * 0.5 + 0.3,
+      animation: `float ${Math.random() * 10 + 10}s linear infinite`,
+    }));
+    setCircles(generatedCircles); // Update the state with the generated circle styles
+  }, []);
+
   return (
     <section className="relative py-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-[#026853]/90 to-[#038167]/90 z-10" />
@@ -21,17 +39,17 @@ export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
       {/* Animated Patterns */}
       <div className="absolute inset-0 z-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-full">
-          {Array.from({ length: 20 }).map((_, i) => (
+          {circles.map((circle, i) => (
             <div
               key={i}
               className="absolute rounded-full bg-white"
               style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: `${Math.random() * 10 + 5}px`,
-                height: `${Math.random() * 10 + 5}px`,
-                opacity: Math.random() * 0.5 + 0.3,
-                animation: `float ${Math.random() * 10 + 10}s linear infinite`,
+                top: circle.top,
+                left: circle.left,
+                width: circle.width,
+                height: circle.height,
+                opacity: circle.opacity,
+                animation: circle.animation,
               }}
             />
           ))}
@@ -140,8 +158,5 @@ export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
 
       <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent z-20"></div>
     </section>
-  )
+  );
 }
-
-// Import the Recycle and Users icons
-import { Recycle, Users } from "lucide-react"

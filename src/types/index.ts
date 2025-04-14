@@ -1,3 +1,6 @@
+export type SectionId = "hero" | "about" | "community" | "workers" | "impact" | "contact"
+
+
 // Define UserRole as a union of string literals
 export type UserRole = "admin" | "franchisee" | "worker" | "manager" | "buyer"| "community-officer"
 

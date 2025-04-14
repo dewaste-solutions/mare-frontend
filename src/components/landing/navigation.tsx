@@ -36,15 +36,8 @@ export function Navigation({ activeSection, scrollToSection, isLandingPage = tru
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled ? "bg-white/95 shadow-md" : "bg-white/80"} backdrop-blur-md`}
     >
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#038167] to-[#026853] text-white shadow-lg">
-            <Recycle className="h-5 w-5" />
-            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-br from-[#038167] to-[#026853] opacity-30 blur-sm"></div>
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-[#038167] to-[#026853] bg-clip-text text-transparent">
-            MARE!
-          </span>
-        </div>
+        <img src="/logo.svg" alt="MARE! Logo" className="h-10" />
+
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6">
