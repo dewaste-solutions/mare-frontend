@@ -29,6 +29,7 @@ We're going to use this [Feature-Based structure](https://dev.to/sathishskdev/pa
 - `src/feature/<router-name>/stores` - Zustand stores specific to the page
 - `src/feature/<router-name>/types` - Type definitions for the page
 - `src/feature/<router-name>/utils` - Utility functions for the page
+- `src/feature/<router-name>/hooks` - Hooks for the page
 
 ### Shared
 
@@ -42,9 +43,17 @@ We're going to use this [Feature-Based structure](https://dev.to/sathishskdev/pa
   - `src/shared/stores` - Shared zustand stores.
   - `src/shared/types` - Shared types.
   - `src/shared/utils` - Shared utilities.
+  - `src/feature/<router-name>/hooks` - Hooks for the page
 
 ---
 ## notes
 - client component will render once in server
-- [Margin considered harmful](https://mxstbr.com/thoughts/margin)
-- [The Rules of Margin Collapse](https://www.joshwcomeau.com/css/rules-of-margin-collapse/)
+- margin 
+  - [Margin considered harmful](https://mxstbr.com/thoughts/margin)
+  - [The Rules of Margin Collapse](https://www.joshwcomeau.com/css/rules-of-margin-collapse/)
+    - TLDR:
+      - Use margin for outside spacing and padding for inside spacing.
+      - For layouts, use Flexbox or Grid or padding.
+        - Use margin as a last resort.
+          - When using margins, try to apply it consistently (either `mt`, `mb`, or `my`), for cleaner and more predictable layouts.
+          - Avoid mixing `margin-top` and `margin-bottom` for the same layout.
