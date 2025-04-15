@@ -48,6 +48,7 @@ We're going to use this [Feature-Based structure](https://dev.to/sathishskdev/pa
 ---
 ## notes
 - Always run `npm run check:write` (not necessarily after every change, but always before pushing to GitHub)
+  - This ensures you catch errors early before GitHub Actions run.
 - client component will render once in server\
 - Don't put "use client" in `page.tsx`, it's ideally for components.
 - margin 
