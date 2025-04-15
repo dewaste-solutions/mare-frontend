@@ -47,7 +47,8 @@ We're going to use this [Feature-Based structure](https://dev.to/sathishskdev/pa
 
 ---
 ## notes
-- client component will render once in server
+- client component will render once in server\
+- Don't put "use client" in `page.tsx`, it's ideally for components.
 - margin 
   - [Margin considered harmful](https://mxstbr.com/thoughts/margin)
   - [The Rules of Margin Collapse](https://www.joshwcomeau.com/css/rules-of-margin-collapse/)
