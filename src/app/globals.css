@@ -1,102 +1,137 @@
-/* In src/app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* Reset default styles */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Center content */
-html,
 body {
-  width: 100%;
-  height: 100%;
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Main container */
-.container {
-  width: 80%;
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: left;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
-/* Team Section */
-.team-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  padding: 40px 0;
-}
-
-/* Team Cards */
-.team-card {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 250px;
-  text-align: center;
-}
-
-/* Avatar */
-.team-card .avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #038167;
-  color: white;
-  font-size: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto 10px;
-}
-
-@font-face {
-  font-family: 'TT Commons';
-  src: url('/path/to/TTCommons-Regular.woff2') format('woff2'),
-    url('/path/to/TTCommons-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'TT Commons';
-  src: url('/path/to/TTCommons-Medium.woff2') format('woff2'),
-    url('/path/to/TTCommons-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'TT Commons';
-  src: url('/path/to/TTCommons-Bold.woff2') format('woff2'),
-    url('/path/to/TTCommons-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .container {
-    width: 95%;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 165 96% 26%;
+    /* #038167 */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 10 85% 77%;
+    /* #F69C91 */
+    --secondary-foreground: 0 0% 9%;
+    --tertiary: 43 100% 61%;
+    /* #FFC539 */
+    --tertiary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 165 96% 26%;
+    /* #038167 */
+    --chart-1: 165 96% 26%;
+    /* #038167 */
+    --chart-2: 10 85% 77%;
+    /* #F69C91 */
+    --chart-3: 43 100% 61%;
+    /* #FFC539 */
+    --chart-4: 165 70% 40%;
+    /* Darker variant of primary */
+    --chart-5: 10 70% 60%;
+    /* Darker variant of secondary */
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 165 96% 26%;
+    /* #038167 */
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 165 96% 26%;
+    /* #038167 */
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 165 96% 26%;
+    /* #038167 */
   }
 
-  .team-section {
-    flex-direction: column;
-    align-items: center;
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 165 96% 26%;
+    /* #038167 */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 10 85% 77%;
+    /* #F69C91 */
+    --secondary-foreground: 0 0% 98%;
+    --tertiary: 43 100% 61%;
+    /* #FFC539 */
+    --tertiary-foreground: 0 0% 9%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 165 96% 26%;
+    /* #038167 */
+    --chart-1: 165 96% 26%;
+    /* #038167 */
+    --chart-2: 10 85% 77%;
+    /* #F69C91 */
+    --chart-3: 43 100% 61%;
+    /* #FFC539 */
+    --chart-4: 165 70% 40%;
+    /* Darker variant of primary */
+    --chart-5: 10 70% 60%;
+    /* Darker variant of secondary */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 165 96% 26%;
+    /* #038167 */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 165 96% 26%;
+    /* #038167 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
   }
 
-  .team-card {
-    width: 90%;
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
   }
 }

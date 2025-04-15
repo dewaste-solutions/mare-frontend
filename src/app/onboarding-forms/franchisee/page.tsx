@@ -950,12 +950,7 @@ export default function FranchiseeApplicationPage() {
                               id="agreeTerms"
                               name="agreeTerms"
                               checked={formData.agreeTerms}
-                              onCheckedChange={(checked) => 
-                                setFormData({
-                                  ...formData,
-                                  agreeTerms: checked as boolean,
-                                })
-                              }
+  
                               required
                             />
                             <div className="space-y-1">

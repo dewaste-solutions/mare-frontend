@@ -115,5 +115,3 @@ export const stats = [
     { name: "Glass", percentage: 10, color: "bg-primary-700" },
     { name: "Organic", percentage: 15, color: "bg-secondary-700" },
   ]
-  
-  

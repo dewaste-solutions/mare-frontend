@@ -49,14 +49,6 @@ export function Header({
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <Link href="/" className="flex items-center gap-2 md:hidden">
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#038167] to-[#026853] text-white shadow-lg">
-              <Recycle className="h-4 w-4" />
-            </div>
-            <span className="text-lg font-bold bg-gradient-to-r from-[#038167] to-[#026853] bg-clip-text text-transparent">
-              MARE!
-            </span>
-          </Link>
         </div>
 
         {showSearch && (

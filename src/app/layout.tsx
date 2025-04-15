@@ -1,13 +1,23 @@
-import "./globals.css"; // ✅ Import Global CSS
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "MARE Waste Management",
+  description: "Waste management and recycling solution",
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
     <html lang="en">
-      <head>
-        <title>MARE!</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
-      <body>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
-  );
+  )
 }

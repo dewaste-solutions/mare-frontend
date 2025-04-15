@@ -8,6 +8,7 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden" 
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -31,7 +32,7 @@ export function RecordCollectionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] bg-white">
         <DialogHeader>
           <DialogTitle>Record Collection</DialogTitle>
           <DialogDescription>Add a new waste collection record</DialogDescription>
@@ -56,7 +57,7 @@ export function RecordCollectionModal({
             <Label htmlFor="date">Collection Date</Label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button color="outline" className="w-full justify-start text-left font-normal">
+                <Button variant="outline" className="w-full justify-start text-left font-normal">
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date ? format(date, "PPP") : <span>Select date</span>}
                 </Button>
@@ -101,7 +102,7 @@ export function RecordCollectionModal({
         </div>
 
         <DialogFooter>
-          <Button color="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button className="bg-primary-500 hover:bg-primary-600 text-white">Save Record</Button>
@@ -123,7 +124,7 @@ export function AddEventModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] bg-white">
         <DialogHeader>
           <DialogTitle>Add Event</DialogTitle>
           <DialogDescription>Schedule a new community event</DialogDescription>
@@ -139,7 +140,7 @@ export function AddEventModal({
             <Label htmlFor="date">Event Date</Label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button color="outline" className="w-full justify-start text-left font-normal">
+                <Button variant="outline" className="w-full justify-start text-left font-normal">
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date ? format(date, "PPP") : <span>Select date</span>}
                 </Button>
@@ -173,7 +174,7 @@ export function AddEventModal({
         </div>
 
         <DialogFooter>
-          <Button color="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button className="bg-primary-500 hover:bg-primary-600 text-white">Save Event</Button>
@@ -182,4 +183,3 @@ export function AddEventModal({
     </Dialog>
   )
 }
-
