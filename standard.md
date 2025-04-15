@@ -31,7 +31,7 @@ We're going to use this [Feature-Based structure](https://dev.to/sathishskdev/pa
 - `src/feature/<router-name>/utils` - Utility functions for the page
 - `src/feature/<router-name>/hooks` - Hooks for the page
 
-### Shared
+### Shared (only use this folder if the function use twice in different pages)
 
 - `src/shared` - Shared modules.
   - `src/shared/components` - Shared components.
