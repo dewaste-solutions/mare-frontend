@@ -8,7 +8,7 @@ import { type Pokemon, getQuestion } from "../data/get-question";
 export const QuestionList = () => {
 	const [page, setPage] = useState(1);
 
-	const { data, isFetching } = useQuery({
+	const { data, isFetching, isLoading } = useQuery({
 		queryKey: ["application", page],
 		queryFn: () => getQuestion(page),
 	});
@@ -16,7 +16,7 @@ export const QuestionList = () => {
 	return (
 		<section>
 			<h1>Questions</h1>
-			{isFetching && <p>loading client</p>}
+			{isFetching && isLoading && <p>loading client</p>}
 			{data?.results?.map((question: Pokemon) => (
 				<p key={question.url}>{question.name}</p>
 			))}
