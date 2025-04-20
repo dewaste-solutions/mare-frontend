@@ -1,4 +1,5 @@
 import { isServer } from "@tanstack/react-query";
+import { env } from "~/env";
 import { PAGELIMIT } from "~/shared/constants/pagination";
 
 export type Pokemon = {
@@ -23,7 +24,7 @@ export const getQuestion = async (page: number): Promise<PokeResponse> => {
 	const offset = (page - 1) * PAGELIMIT;
 
 	const res = await fetch(
-		`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${PAGELIMIT}`,
+		`${env.NEXT_PUBLIC_BACKEND_URL}/api/v2/pokemon?offset=${offset}&limit=${PAGELIMIT}`,
 	);
 	if (!res.ok) throw new Error("Failed to fetch");
 	return res.json();
