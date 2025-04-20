@@ -1,6 +1,8 @@
-import "~/shared/styles/globals.css";
-
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Metadata } from "next";
+import ProviderTanstackQuery from "~/shared/components/provider/tanstack-query";
+
+import "~/shared/styles/globals.css";
 
 export const metadata: Metadata = {
 	title: "Mare! App",
@@ -13,7 +15,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<body>
+				<ProviderTanstackQuery>
+					{children}
+					<ReactQueryDevtools initialIsOpen={false} />
+				</ProviderTanstackQuery>
+			</body>
 		</html>
 	);
 }
