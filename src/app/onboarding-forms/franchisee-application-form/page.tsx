@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
     Briefcase,
     Building2,
@@ -17,6 +15,7 @@ import {
     MapPin,
     User,
     Users,
+    Check
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,9 +26,67 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Image from "next/image"
 import { FileUpload } from "@/components/application form - components/FileUpload"
 
+// Types for our form schema
+type FieldOption = {
+    value: string;
+    label: string;
+}
+
+type Field = {
+    id: string;
+    label: string;
+    type: string;
+    placeholder?: string;
+    description?: string;
+    required: boolean;
+    options?: FieldOption[];
+}
+
+type Section = {
+    title: string;
+    icon: string;
+    description?: string;
+    fields?: Field[];
+}
+
+type Step = {
+    id: number;
+    name: string;
+    icon: string;
+    sections: Section[];
+}
+
+type FormSchema = {
+    steps: Step[];
+}
+
 export default function FranchiseeApplicationForm() {
     const [currentStep, setCurrentStep] = useState(1)
-    const totalSteps = 6
+    const [formSchema, setFormSchema] = useState<FormSchema | null>(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        const fetchFormSchema = async () => {
+            try {
+                const response = await fetch('/api/franchisee_formSchema')
+                if (!response.ok) {
+                    throw new Error('Failed to fetch form schema')
+                }
+                const data = await response.json()
+                setFormSchema(data)
+                setLoading(false)
+            } catch (err) {
+                setError('Error loading form data. Please try again later.')
+                setLoading(false)
+                console.error('Error fetching form schema:', err)
+            }
+        }
+
+        fetchFormSchema()
+    }, [])
+
+    const totalSteps = formSchema?.steps.length || 6
 
     const handleNext = () => {
         if (currentStep < totalSteps) {
@@ -48,6 +105,51 @@ export default function FranchiseeApplicationForm() {
         }
     }
 
+    // Helper function to get the icon component
+    const getIconComponent = (iconName: string) => {
+        const iconMap: Record<string, React.ReactNode> = {
+            User: <User className="h-5 w-5" />,
+            Contact: <Contact className="h-4 w-4 text-emerald-600" />,
+            MapPin: <MapPin className="h-5 w-5" />,
+            Building2: <Building2 className="h-4 w-4 text-emerald-600" />,
+            Briefcase: <Briefcase className="h-4 w-4 text-emerald-600" />,
+            BuildingIcon: <BuildingIcon className="h-5 w-5" />,
+            Users: <Users className="h-4 w-4 text-emerald-600" />,
+            House: <House className="h-5 w-5" />,
+            HouseIcon: <HouseIcon className="h-4 w-4 text-emerald-600" />,
+            FileText: <FileText className="h-5 w-5" />,
+            Check: <Check className="h-5 w-5" />,
+        }
+        return iconMap[iconName] || <div className="h-5 w-5"></div>
+    }
+
+    if (loading) {
+        return (
+            <div className="container mx-auto py-20 flex justify-center">
+                <div className="flex flex-col items-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+                    <p className="mt-4 text-gray-600">Loading form...</p>
+                </div>
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className="container mx-auto py-20 flex justify-center">
+                <div className="flex flex-col items-center">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <p>{error}</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (!formSchema) {
+        return null
+    }
+
     return (
         <div className="container mx-auto py-8 px-4 max-w-4xl">
             <div className="flex flex-col items-center mb-8">
@@ -63,7 +165,7 @@ export default function FranchiseeApplicationForm() {
                 <div className="mb-8">
                     <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-bold font-tt-commons">
-                            Step {currentStep} of {totalSteps - 1}: {getStepName(currentStep)}
+                            Step {currentStep} of {totalSteps - 1}: {formSchema.steps[currentStep - 1]?.name || ""}
                         </span>
                     </div>
                     <div className="relative">
@@ -90,7 +192,7 @@ export default function FranchiseeApplicationForm() {
 
             {/* Form Content */}
             <div className="bg-white rounded-lg border p-6">
-                {renderFormStep(currentStep)}
+                {renderFormStep(currentStep, formSchema, getIconComponent)}
 
                 {/* Navigation Buttons */}
                 <div className="flex justify-between mt-8">
@@ -119,40 +221,171 @@ export default function FranchiseeApplicationForm() {
     )
 }
 
+function renderFormStep(step: number, formSchema: FormSchema, getIconComponent: (iconName: string) => React.ReactNode) {
+    const currentStep = formSchema.steps.find(s => s.id === step)
 
-function getStepName(step: number): string {
-    switch (step) {
-        case 1:
-            return "Basic Information"
-        case 2:
-            return "Location"
-        case 3:
-            return "Organizational Structure"
-        case 4:
-            return "Community Profile"
-        case 5:
-            return "Documents"
-        case 6:
-            return "Success"
-        default:
-            return ""
+    if (!currentStep) {
+        return null
     }
+
+    if (step === 6) {
+        // Success step
+        return <SuccessStep description={currentStep.sections[0]?.description} />
+    }
+
+    return (
+        <div>
+            <StepHeader
+                title={currentStep.name}
+                icon={getIconComponent(currentStep.icon)}
+            />
+
+            {currentStep.sections.map((section, index) => (
+                <SectionCard
+                    key={index}
+                    title={section.title}
+                    icon={getIconComponent(section.icon)}
+                >
+                    {renderSectionFields(section)}
+                </SectionCard>
+            ))}
+        </div>
+    )
 }
 
-function renderFormStep(step: number) {
-    switch (step) {
-        case 1:
-            return <BasicInformationStep />
-        case 2:
-            return <LocationStep />
-        case 3:
-            return <OrganizationalStructureStep />
-        case 4:
-            return <CommunityProfileStep />
-        case 5:
-            return <DocumentsStep />
-        case 6:
-            return <SuccessStep />
+function renderSectionFields(section: Section) {
+    if (!section.fields) {
+        return null
+    }
+
+    return (
+        <div className="space-y-4">
+            {section.fields.map((field, index) => (
+                <div key={index} className="space-y-2">
+                    {renderField(field)}
+                </div>
+            ))}
+        </div>
+    )
+}
+
+function renderField(field: Field) {
+    switch (field.type) {
+        case 'input':
+            return (
+                <>
+                    <div className="font-tt-commons font-semibold">
+                        <Label htmlFor={field.id}>{field.label}</Label>
+                    </div>
+                    <Input
+                        id={field.id}
+                        placeholder={field.placeholder}
+                        className="text-sm font-normal shadow-lg w-full"
+                        required={field.required}
+                    />
+                    {field.description && (
+                        <p className="text-xs text-gray-500 mt-1 ml-2">{field.description}</p>
+                    )}
+                </>
+            )
+        case 'email':
+            return (
+                <>
+                    <div className="font-tt-commons font-semibold">
+                        <Label htmlFor={field.id}>{field.label}</Label>
+                    </div>
+                    <Input
+                        id={field.id}
+                        type="email"
+                        placeholder={field.placeholder}
+                        className="text-sm font-normal shadow-lg w-full"
+                        required={field.required}
+                    />
+                    {field.description && (
+                        <p className="text-xs text-gray-500 mt-1 ml-2">{field.description}</p>
+                    )}
+                </>
+            )
+        case 'date':
+            return (
+                <>
+                    <div className="font-tt-commons font-semibold">
+                        <Label htmlFor={field.id}>{field.label}</Label>
+                    </div>
+                    <Input
+                        id={field.id}
+                        type="date"
+                        placeholder={field.placeholder}
+                        className="text-sm font-normal shadow-lg w-full"
+                        required={field.required}
+                    />
+                    {field.description && (
+                        <p className="text-xs text-gray-500 mt-1 ml-2">{field.description}</p>
+                    )}
+                </>
+            )
+        case 'textarea':
+            return (
+                <>
+                    <div className="font-tt-commons font-semibold">
+                        <Label htmlFor={field.id}>{field.label}</Label>
+                    </div>
+                    <Textarea
+                        id={field.id}
+                        placeholder={field.placeholder}
+                        className={field.id === 'interest' ? "min-h-[350px]" : "min-h-[110px]"}
+                        required={field.required}
+                    />
+                    {field.description && (
+                        <p className="text-xs text-gray-500 mt-1 ml-2">{field.description}</p>
+                    )}
+                </>
+            )
+        case 'radio':
+            return (
+                <>
+                    <p className="text-sm mb-3 font-tt-commons font-semibold">{field.label}</p>
+                    <RadioGroup defaultValue={field.options?.[0].value}>
+                        <div className={`space-y-2 ${field.id === 'businessStructure' ? 'w-1/3' : 'w-1/2'} font-tt-commons`}>
+                            {field.options?.map((option) => (
+                                <div key={option.value} className="flex items-center space-x-2 border rounded-md p-3 border-gray-300 bg-white">
+                                    <RadioGroupItem value={option.value} id={option.value} className="text-emerald-700" />
+                                    <Label htmlFor={option.value}>{option.label}</Label>
+                                </div>
+                            ))}
+                        </div>
+                    </RadioGroup>
+                </>
+            )
+        case 'select':
+            return (
+                <>
+                    <div className="font-tt-commons font-semibold">
+                        <Label htmlFor={field.id}>{field.label}</Label>
+                    </div>
+                    <Select>
+                        <SelectTrigger id={field.id} className="w-full">
+                            <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                            {field.options?.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {field.description && (
+                        <p className="text-xs text-gray-500 mt-1 ml-2">{field.description}</p>
+                    )}
+                </>
+            )
+        case 'file':
+            return (
+                <div className="border-2 border-dashed rounded-lg p-8 text-center">
+                    <div className="flex justify-center mb-4">
+                        <FileUpload />
+                    </div>
+                </div>
+            )
         default:
             return null
     }
@@ -189,310 +422,7 @@ function SectionCard({
     )
 }
 
-function BasicInformationStep() {
-    return (
-        <div>
-            <StepHeader title="Basic Information" icon={<User className="h-5 w-5" />} />
-
-            <SectionCard title="Personal Information" icon={<User className="h-4 w-4 text-emerald-600" />}>
-                <div className="space-y-4">
-                    {/* Name fields - stacked on mobile, side by side on larger screens */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="firstName" className="font-tt-commons font-semibold">First Name</Label>
-                            <Input id="firstName" placeholder="First Name" className="text-sm font-normal shadow-lg w-full" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="middleName" className="font-tt-commons font-semibold">Middle Name</Label>
-                            <Input id="middleName" placeholder="Middle Name" className="text-sm font-normal shadow-lg w-full" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="lastName" className="font-tt-commons font-semibold">Last Name</Label>
-                            <Input id="lastName" placeholder="Last Name" className="text-sm font-normal shadow-lg w-full" />
-                        </div>
-                    </div>
-
-                    {/* Birthday field */}
-                    <div className="space-y-2">
-                        <Label htmlFor="birthday" className="font-tt-commons font-semibold">Birthday</Label>
-                        <Input
-                            id="birthday"
-                            type="date"
-                            placeholder="MM/DD/YYYY"
-                            className="text-xs font-normal font-tt-commons shadow-lg w-full"
-                        />
-                    </div>
-                </div>
-            </SectionCard>
-
-            <SectionCard title="Contact Information" icon={<Contact className="h-4 w-4 text-teal-600" />}>
-                <div className=" font-tt-commons font-semibold">
-                    <Label htmlFor="email">Email Address</Label>
-                </div>
-                <Input
-                    id="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    className="mt-2 text-sm font-normal w-full shadow-lg"
-                />
-            </SectionCard>
-
-            <SectionCard title="Address" icon={<MapPin className="h-4 w-4 text-teal-600" />}>
-                <div className="space-y-2 font-tt-commons font-semibold">
-                    <div>
-                        <Label htmlFor="addressLine1">Address Line 1</Label>
-                    </div>
-                    <Input
-                        id="addressLine1"
-                        placeholder="Street address, P.O box, company name"
-                        className=" text-sm font-normal w-full shadow-lg"
-                    />
-                    <div className="mt-2">
-                        <Label htmlFor="addressLine2">Address Line 2</Label>
-                    </div>
-                    <Input
-                        id="addressLine2"
-                        placeholder="Apartment, suite, unit, building, floor, etc."
-                        className="text-sm font-normal w-full shadow-lg"
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="my-2">
-                            <Label htmlFor="province">Province</Label>
-                            <Input id="province" placeholder="Province" className="text-sm font-normal w-full shadow-lg" />
-                        </div>
-                        <div className="my-2">
-                            <Label htmlFor="city">City / Municipality</Label>
-                            <Input id="city" placeholder="City / Municipality" className="text-sm font-normal w-full shadow-lg" />
-                        </div>
-                        <div className="my-2">
-                            <Label htmlFor="barangay">Barangay</Label>
-                            <Input id="barangay" placeholder="Barangay" className="text-sm font-normal w-full shadow-lg" />
-                        </div>
-                    </div>
-                </div>
-            </SectionCard>
-
-            <SectionCard title="Interest in MARE!" icon={<Building2 className="h-4 w-4 text-teal-600" />}>
-                <div>
-                    <p className="text-sm mb-2 font-tt-commons font-semibold">Interesado ako na magnegosyo ng MARE! dahil</p>
-                    <Textarea placeholder="Ibahagi ang iyong dahilan..." className="min-h-[350px] shadow-lg text-xs bg-white" />
-                    <p className="text-xs text-gray-500 mt-2 font-tt-commons font-semibold">
-                        Tell us why you're interested in becoming a MARE! franchisee
-                    </p>
-                </div>
-            </SectionCard>
-        </div>
-    )
-}
-
-function LocationStep() {
-    return (
-        <div>
-            <StepHeader title="Location" icon={<MapPin className="h-5 w-5" />} />
-
-            <SectionCard title="Property Ownership" icon={<Briefcase className="h-4 w-4 text-teal-600" />}>
-                <p className="text-sm mb-3 font-tt-commons font-semibold">Ako ay may lugar para sa MARE!</p>
-                <RadioGroup defaultValue="sariling-pagmamay-ari">
-                    <div className="space-y-2 w-1/2 font-tt-commons">
-                        <div className="flex items-center space-x-2 border rounded-md p-3 border-gray-300 bg-white">
-                            <RadioGroupItem value="sariling-pagmamay-ari" id="sariling-pagmamay-ari" className="text-emerald-700" />
-                            <Label htmlFor="sariling-pagmamay-ari">Sariling pagmamay-ari</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 border-gray-300 bg-white">
-                            <RadioGroupItem value="nirerentahan" id="nirerentahan" className="text-emerald-700" />
-                            <Label htmlFor="nirerentahan">Nirerentahan o nirerentahan pa lamang</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 border-gray-300 bg-white">
-                            <RadioGroupItem value="sa-kooperatiba" id="sa-kooperatiba" className="text-emerald-700" />
-                            <Label htmlFor="sa-kooperatiba">Sa Kooperatiba</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 border-gray-300 bg-white">
-                            <RadioGroupItem value="sa-barangay" id="sa-barangay" className="text-emerald-700" />
-                            <Label htmlFor="sa-barangay">Sa kasosyo sa negosyo</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 border-gray-300 bg-white">
-                            <RadioGroupItem value="hinahati" id="hinahati" className="text-emerald-700" />
-                            <Label htmlFor="hinahati">Hihiramin sa kakilala</Label>
-                        </div>
-                    </div>
-                </RadioGroup>
-            </SectionCard>
-
-            <SectionCard title="Location Details" icon={<MapPin className="h-4 w-4 text-teal-600 font-tt-commons" />}>
-                <div className="space-y-2 font-tt-commons font-semibold">
-                    <div>
-                        <Label htmlFor="dimensions">Ito ay may sukat na (ibigay ang dimension in meters)</Label>
-                    </div>
-                    <Input id="dimensions" placeholder="e.g. 5m x 10m" className="text-xs font-tt-commons w-full" />
-                    <div>
-                        <Label htmlFor="googleMaps">
-                            Ibahagi ang lugar kung saan niyo itatayo ang inyong MARE! Facility sa pamamagitan ng Google Maps
-                        </Label>
-                    </div>
-                    <Input id="googleMaps" placeholder="Google Maps link" className="text-xs font-tt-commons w-full" />
-                </div>
-            </SectionCard>
-        </div>
-    )
-}
-
-function OrganizationalStructureStep() {
-    return (
-        <div>
-            <StepHeader title="Organizational Structure" icon={<BuildingIcon className="h-5 w-5" />} />
-
-            <SectionCard title="Business Structure" icon={<Building2 className="h-4 w-4 text-teal-600" />}>
-                <p className="text-sm mb-3 font-tt-commons font-semibold">Patatakbuhin ang negosyong ito bilang</p>
-                <RadioGroup>
-                    <div className="space-y-2 font-tt-commons w-1/3 ">
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="kooperatiba" id="kooperatiba" className="text-emerald-700 " />
-                            <Label htmlFor="kooperatiba">Kooperatiba</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="korporasyon" id="korporasyon" className="text-emerald-700" />
-                            <Label htmlFor="korporasyon">Korporasyon</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="sole-proprietor" id="sole-proprietor" className="text-emerald-700" />
-                            <Label htmlFor="sole-proprietor">Sole Proprietor</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="one-person-corporation" id="one-person-corporation" className="text-emerald-700" />
-                            <Label htmlFor="one-person-corporation">One Person Corporation</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="non-profit" id="non-profit" className="text-emerald-700" />
-                            <Label htmlFor="non-profit">Non-profit organization o foundation</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="local-government" id="local-government" className="text-emerald-700" />
-                            <Label htmlFor="local-government">Local government unit</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="homeowners" id="homeowners" className="text-emerald-700" />
-                            <Label htmlFor="homeowners">Homeowners association</Label>
-                        </div>
-                    </div>
-                </RadioGroup>
-            </SectionCard>
-
-            <SectionCard title="Management" icon={<Users className="h-4 w-4 text-teal-600" />}>
-                <p className="text-sm mb-3 font-tt-commons font-semibold">Patatakbuhin ang negosyong ito bilang</p>
-                <RadioGroup className="font-tt-commons w-1/3">
-                    <div className="space-y-2">
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="ako-mismo" id="ako-mismo" className="text-emerald-700" />
-                            <Label htmlFor="ako-mismo">Oo, ako mismo ang manager</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="iba-managers" id="iba-managers" className="text-emerald-700" />
-                            <Label htmlFor="iba-managers">Oo, ako ay isa lamang sa mga managers</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="hindi-ako" id="hindi-ako" className="text-emerald-700" />
-                            <Label htmlFor="hindi-ako">Hindi, may tao akong kukunin bilang manager</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-md p-3 bg-white shadow-lg border-emerald-600">
-                            <RadioGroupItem value="hindi-pa-alam" id="hindi-pa-alam" className="text-emerald-700" />
-                            <Label htmlFor="hindi-pa-alam">Hindi pa ako sigurado</Label>
-                        </div>
-                    </div>
-                </RadioGroup>
-                <div className="mt-4 font-tt-commons">
-                    <Label htmlFor="teamMembers" className="mt-2">
-                        Ibigay ang lahat ng pangalan ng mga tauhan
-                    </Label>
-                    <Textarea id="teamMembers" placeholder="Listahan ng mga pangalan..." className="min-h-[110px] text-xs bg-white" />
-                    <p className="text-xs text-gray-500 mt-2 font-tt-commons ml-6">
-                        List all staff members who will be involved in the operation
-                    </p>
-                </div>
-            </SectionCard>
-        </div>
-    )
-}
-
-function CommunityProfileStep() {
-    return (
-        <div>
-            <StepHeader title="Community Profile" icon={<House className="h-5 w-5" />} />
-
-            <SectionCard title="Service Area" icon={<HouseIcon className="h-4 w-4 text-teal-600" />}>
-                <div className="space-y-2 font-tt-commons">
-                    <div>
-                        <Label htmlFor="serviceRadius">Ilang mga kabahayan ang maseserbisyuhan ng inyong MARE! Facility</Label>
-                    </div>
-                    <Input id="serviceRadius" placeholder="e.g. 500" className="text-sm w-full shadow-lg bg-white" />
-                    <p className="text-xs text-gray-500 mt-2 ml-2">Estimate the number of households in your service area</p>
-                    <div>
-                        <Label htmlFor="serviceAreas">
-                            Ibigay ang pangalan ng mga streets, subdibisyon, komunidad, at/o barangay
-                        </Label>
-                        <Textarea id="serviceAreas" placeholder="Listahan ng mga lugar..." className="min-h-[110px] bg-white" />
-                        <p className="text-xs text-gray-500 mt-2 ml-2">List all areas that will served by your facility</p>
-                    </div>
-                </div>
-            </SectionCard>
-
-            <SectionCard title="Business Clients" icon={<Briefcase className="h-4 w-4 text-teal-600" />}>
-                <div className="space-y-2 font-tt-commons">
-                    <div>
-                        <Label htmlFor="clientCount">
-                            Ilang mga kalapit na negosyo ang magiging kliyente ng inyong MARE! Facility
-                        </Label>
-                    </div>
-                    <Input id="clientCount" placeholder="e.g. 5m x 10m" className="text-sm bg-white" />
-                    <p className="text-xs text-gray-500 ml-2">Estimate the number of businesses in your service area</p>
-                    <div>
-                        <Label htmlFor="clientTypes">Magbigay ng mga pangalan ng mga negosyong ito at uri ng negosyo nila</Label>
-                        <Textarea id="clientTypes" placeholder="Listahan ng mga negosyo..." className="min-h-[110px] bg-white" />
-                        <p className="text-xs text-gray-500 ml-2">List the types and names of businesses in your service area</p>
-                    </div>
-                </div>
-            </SectionCard>
-        </div>
-    )
-}
-
-function DocumentsStep() {
-    return (
-        <div>
-            <StepHeader title="Documents" icon={<FileText className="h-5 w-5" />} />
-
-            <div className="bg-white p-6 rounded-lg border mb-6">
-                <h3 className="font-semibold mb-4">Documents</h3>
-                <p className="mb-4 font-semibold">Please select the document type and upload the corresponding file:</p>
-
-                <div className="bg-gray-50 p-6 rounded-lg border font-tt-commons">
-                    <div className="mb-4">
-                        <Label htmlFor="documentType">Which documents are you uploading?</Label>
-                        <Select>
-                            <SelectTrigger id="documentType" className="w-full">
-                                <SelectValue placeholder="Select Document Type" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-white">
-                                <SelectItem value="sec">SEC Registration (Articles of Incorporation)</SelectItem>
-                                <SelectItem value="articles">SEC Registration (By Laws)</SelectItem>
-                                <SelectItem value="dti">DTI Registration</SelectItem>
-                                <SelectItem value="bir">BIR 2303</SelectItem>
-                                <SelectItem value="pcnc">PCNC Registration (whenever applicable)</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
-                        <div className="flex justify-center mb-4">
-                            <FileUpload />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-function SuccessStep() {
+function SuccessStep({ description }: { description?: string }) {
     return (
         <div className="flex flex-col items-center justify-center font-tt-commons py-10">
             <div className="mb-6">
@@ -500,8 +430,7 @@ function SuccessStep() {
             </div>
             <h2 className="text-2xl font-bold mb-4 text-center">Application Successfully Submitted!</h2>
             <p className="text-gray-600 text-center max-w-md">
-                Thank you for applying to become a MARE! franchise partner. Your application is under review. You will receive
-                an update via email once a decision is made.
+                {description || "Thank you for applying to become a MARE! franchise partner. Your application is under review. You will receive an update via email once a decision is made."}
             </p>
         </div>
     )
