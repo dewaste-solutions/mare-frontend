@@ -14,13 +14,16 @@ interface CollectionMapProps {
   height?: string
 }
 
+// Define a type for tab values
+type TabValue = "all" | CollectionStatus;
+
 export function CollectionMap({
   collectionPoints,
   onPointClick,
   interactive = true,
   height = "600px",
 }: CollectionMapProps) {
-  const [activeTab, setActiveTab] = useState<"all" | CollectionStatus>("all")
+  const [activeTab, setActiveTab] = useState<TabValue>("all")
   const [filteredPoints, setFilteredPoints] = useState<CollectionPoint[]>(collectionPoints)
   const mapContainerRef = useRef<HTMLDivElement>(null)
 
@@ -66,7 +69,7 @@ export function CollectionMap({
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="all" className="mb-4" onValueChange={(value) => setActiveTab(value as any)}>
+        <Tabs defaultValue="all" className="mb-4" onValueChange={(value) => setActiveTab(value as TabValue)}>
           <TabsList>
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="collected">Collected</TabsTrigger>

@@ -2,185 +2,201 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { motion } from "framer-motion"
-import { ArrowRight, Recycle, Eye, EyeOff, ChevronLeft } from "lucide-react"
-
+import { Recycle, Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function LoginPage() {
+  const router = useRouter()
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [rememberMe, setRememberMe] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  })
 
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle login logic here
-    console.log({ email, password, rememberMe })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  // Avoid hydration mismatch by rendering a simple loading state
-  // until the component has mounted on the client
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-md p-8">
-          <div className="animate-pulse flex flex-col space-y-4">
-            <div className="h-12 bg-gray-200 rounded"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-      </div>
-    )
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+
+    try {
+      // Simple validation
+      if (!formData.email || !formData.password) {
+        toast({
+          title: "Error",
+          description: "Please fill in all fields",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Determine role based on email (temporary hardcoded credentials)
+      let role = "community-officer" // default role
+
+      if (formData.email === "admin@mare.com") {
+        role = "admin"
+      } else if (formData.email === "franchisee@mare.com") {
+        role = "franchisee"
+      } else if (formData.email === "officer@mare.com") {
+        role = "community-officer"
+      } else {
+        toast({
+          title: "Login failed",
+          description: "Invalid credentials",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Store user role in localStorage (for demo purposes)
+      if (typeof window !== "undefined") {
+        localStorage.setItem("mare-user-role", role)
+        localStorage.setItem("mare-user-email", formData.email)
+      }
+
+      // Show success message
+      toast({
+        title: "Login successful",
+        description: "Redirecting to dashboard...",
+      })
+
+      // Redirect to appropriate dashboard based on role
+      setTimeout(() => {
+        if (role === "admin") {
+          router.push("/admin/dashboard")
+        } else if (role === "franchisee") {
+          router.push("/franchisee/dashboard")
+        } else {
+          router.push("/dashboard")
+        }
+      }, 1000)
+    } catch (error) {
+      console.error("Login error:", error)
+      toast({
+        title: "Login failed",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-green-50 dark:from-gray-900 dark:to-gray-800 flex flex-col transition-colors duration-300">
-      {/* Decorative Elements */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-[40%] -right-[30%] h-[80%] w-[80%] rounded-full bg-green-100/30 dark:bg-green-900/20 blur-3xl"></div>
-        <div className="absolute -bottom-[40%] -left-[30%] h-[80%] w-[80%] rounded-full bg-green-100/30 dark:bg-green-900/20 blur-3xl"></div>
-      </div>
-
-      {/* Header */}
-      <header className="w-full py-4 px-4 sm:px-6 lg:px-8">
-        <div className="container flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white shadow-lg">
-              <Recycle className="h-5 w-5" />
-              <div className="absolute -inset-0.5 rounded-full bg-gradient-to-br from-green-400 to-green-600 opacity-30 blur-sm"></div>
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-green-800 dark:from-green-400 dark:to-green-600 bg-clip-text text-transparent">
-              MARE!
-            </span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="flex items-center text-sm text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Back to Home
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-grow flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <Card className="p-8 shadow-xl border-green-100 dark:border-green-900 bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm">
-              <div className="text-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back!</h1>
-                <p className="text-gray-600 dark:text-gray-300">Sign in to your MARE! account</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md">
+        <div className="flex justify-center mb-8">
+          <Link href="/">
+            <div className="flex items-center gap-2">
+              <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#038167] to-[#026853] text-white shadow-lg">
+                <Recycle className="h-6 w-6" />
               </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-[#038167] to-[#026853] bg-clip-text text-transparent">
+                MARE!
+              </span>
+            </div>
+          </Link>
+        </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-700 dark:text-gray-200">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="border-gray-300 dark:border-gray-700 focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label htmlFor="password" className="text-gray-700 dark:text-gray-200">
-                      Password
-                    </Label>
-                    <Link
-                      href="/forgot-password"
-                      className="text-xs text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="border-gray-300 dark:border-gray-700 focus:border-green-500 focus:ring-green-500 pr-10 dark:bg-gray-700 dark:text-white"
-                      required
-                    />
-                    <button
-                      type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <Checkbox
-                    id="remember"
-                    checked={rememberMe}
-                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                    className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600 dark:border-gray-600"
-                  />
-                  <label htmlFor="remember" className="ml-2 text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
-                    Remember me
+        <Card className="border-gray-200 shadow-md">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+            <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium">
+                  Email
+                </label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="password" className="text-sm font-medium">
+                    Password
                   </label>
+                  <Link href="/forgot-password" className="text-xs text-[#038167] hover:underline">
+                    Forgot password?
+                  </Link>
                 </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 dark:from-green-500 dark:to-green-600 dark:hover:from-green-600 dark:hover:to-green-700 text-white shadow-md hover:shadow-lg transition-all"
-                >
-                  Sign In
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </form>
-
-            </Card>
-          </motion.div>
-
-          <div className="mt-8 text-center">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+                <div className="relative">
+                  <Input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+              <Button type="submit" className="w-full bg-[#038167] hover:bg-[#026853]" disabled={isLoading}>
+                {isLoading ? "Signing in..." : "Sign in"}
+              </Button>
+            </form>
+            <div className="mt-4 text-xs text-gray-500 p-3 bg-gray-50 rounded-md">
+              <p className="font-medium mb-1">Demo Credentials:</p>
+              <p>Admin: admin@mare.com / password</p>
+              <p>Franchisee: franchisee@mare.com / password</p>
+              <p>Community Officer: officer@mare.com / password</p>
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-4 border-t p-6">
+            <div className="text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <Link href="/join-community" className="text-[#038167] hover:underline">
+                Join a community
+              </Link>
+            </div>
+            <div className="text-center text-xs text-gray-500">
               By signing in, you agree to our{" "}
-              <Link
-                href="/terms"
-                className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"
-              >
+              <Link href="/terms" className="underline">
                 Terms of Service
               </Link>{" "}
               and{" "}
-              <Link
-                href="/privacy"
-                className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"
-              >
+              <Link href="/privacy" className="underline">
                 Privacy Policy
               </Link>
-            </p>
-          </div>
-        </div>
-      </main>
-
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   )
 }

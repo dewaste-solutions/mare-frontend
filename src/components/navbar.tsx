@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import type { SectionId } from "@/types"
 
 type NavbarProps = {
@@ -32,7 +32,8 @@ export function Navbar({ activeSection, scrollToSection, sectionRefs }: NavbarPr
       setShowScrollTop(window.scrollY > 500)
 
       // Determine active section based on the scroll position
-      const current = Object.entries(sectionRefs).find(([key, ref]) => {
+      const current = Object.entries(sectionRefs).find((entry) => {
+        const ref = entry[1]
         if (!ref.current) return false
         const rect = ref.current.getBoundingClientRect()
         return rect.top <= 100 && rect.bottom >= 100

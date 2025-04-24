@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
       {/* Today's Routes */}
       <Card className="mt-6">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-lg font-semibold">Today's Routes</CardTitle>
+        <CardTitle className="text-lg font-semibold">Today&apos;s Routes</CardTitle>
           <Button variant="outline" size="sm" className="h-8">
             <Calendar className="h-4 w-4 mr-2" />
             View Schedule

@@ -50,7 +50,7 @@ export function TeamSection({ onOpenProfile, onViewPositions }: TeamSectionProps
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <Badge className="mb-4 bg-[#e6f3f1] text-[#026853] hover:bg-[#d1ebe7]">Our People</Badge>
+          <Badge className="mb-4 bg-[#F69C91]/20 text-[#F69C91] hover:bg-[#d1ebe7]">Our People</Badge>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 bg-gradient-to-r from-[#026853] to-[#038167] bg-clip-text text-transparent">
             Our Team
           </h2>

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { CheckCircle } from "lucide-react"
 
 // Import components
@@ -51,28 +51,29 @@ export default function LandingPage() {
   // State for navigation
   const [activeSection, setActiveSection] = useState<SectionId>("hero")
 
-  // Refs for sections - properly typed with HTMLDivElement
-  const sectionRefs = {
-    hero: useRef<HTMLDivElement>(null),
-    about: useRef<HTMLDivElement>(null),
-    community: useRef<HTMLDivElement>(null),
-    workers: useRef<HTMLDivElement>(null),
-    impact: useRef<HTMLDivElement>(null),
-    contact: useRef<HTMLDivElement>(null),
-  }
+  // Create refs outside of useMemo
+  const heroRef = useRef<HTMLDivElement>(null)
+  const aboutRef = useRef<HTMLDivElement>(null)
+  const communityRef = useRef<HTMLDivElement>(null)
+  const workersRef = useRef<HTMLDivElement>(null)
+  const impactRef = useRef<HTMLDivElement>(null)
+  const contactRef = useRef<HTMLDivElement>(null)
 
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [showScrollTop, setShowScrollTop] = useState(false)
-  const [newsletterEmail, setNewsletterEmail] = useState("")
+  // Use useMemo to create a stable reference object
+  const sectionRefs = useMemo(() => ({
+    hero: heroRef,
+    about: aboutRef,
+    community: communityRef,
+    workers: workersRef,
+    impact: impactRef,
+    contact: contactRef,
+  }), []);
 
   // Handle scroll events to update active section
   useEffect(() => {
     const handleScroll = () => {
       // Determine active section
-      const current = Object.entries(sectionRefs).find(([key, ref]) => {
+      const current = Object.entries(sectionRefs).find(([, ref]) => {
         if (!ref.current) return false
         const rect = ref.current.getBoundingClientRect()
         return rect.top <= 100 && rect.bottom >= 100
@@ -85,7 +86,7 @@ export default function LandingPage() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [sectionRefs])
 
   // Smooth scroll function - modified to accept string and validate it
   const scrollToSection = (sectionId: string) => {
@@ -119,68 +120,6 @@ export default function LandingPage() {
     setIsProfileOpen(true)
   }
 
-  // Handle newsletter subscription
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Newsletter subscription for:", newsletterEmail)
-    setNewsletterEmail("")
-    setShowThankYouToast(true)
-    setTimeout(() => setShowThankYouToast(false), 3000)
-  }
-
-  useEffect(() => {
-    setIsVisible(true)
-
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % 3)
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const testimonials = [
-    {
-      name: "Barangay San Isidro",
-      location: "Manila",
-      quote:
-        "MARE! transformed how our community handles waste. We've reduced our landfill contribution by 75% and created 5 new jobs for local residents.",
-    },
-    {
-      name: "Barangay Mabuhay",
-      location: "Quezon City",
-      quote:
-        "Our MARE! Center has become a community hub where residents learn about sustainability while contributing to a cleaner environment.",
-    },
-    {
-      name: "Barangay Bagong Pag-asa",
-      location: "Cebu",
-      quote:
-        "The income from our recycled materials has funded community projects and provided additional income for participating households.",
-    },
-  ]
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  }
-
-  // Custom color styles
-  const primaryColor = "#038167"
-  const primaryLightColor = "#039d7e"
-  const primaryDarkColor = "#026853"
-  const primaryVeryLightColor = "#e6f3f1"
-  const primaryVeryDarkColor = "#01574a"
-
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-white to-green-50">
       {/* Decorative Elements */}
@@ -197,32 +136,32 @@ export default function LandingPage() {
       />
 
       {/* Hero Section */}
-      <div ref={sectionRefs.hero}>
+      <div ref={heroRef}>
         <HeroSection onJoinCommunity={handleJoinCommunity} onMeetTeam={() => scrollToSection("workers")} />
       </div>
 
       {/* About Section */}
-      <div ref={sectionRefs.about}>
+      <div ref={aboutRef}>
         <AboutSection onLearnMore={handleLearnMore} />
       </div>
 
       {/* Community Section */}
-      <div ref={sectionRefs.community}>
+      <div ref={communityRef}>
         <CommunitySection onLearnMore={handleLearnMore} />
       </div>
 
       {/* Team Section */}
-      <div ref={sectionRefs.workers}>
+      <div ref={workersRef}>
         <TeamSection onOpenProfile={openProfile} onViewPositions={handleViewPositions} />
       </div>
 
       {/* Impact Section */}
-      <div ref={sectionRefs.impact}>
+      <div ref={impactRef}>
         <ImpactSection />
       </div>
 
       {/* Contact Section */}
-      <div ref={sectionRefs.contact}>
+      <div ref={contactRef}>
         <ContactSection onLearnMore={handleLearnMore} />
       </div>
 
@@ -252,7 +191,7 @@ export default function LandingPage() {
         <div className="fixed bottom-4 right-4 bg-[#038167] text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-in fade-in slide-in-from-bottom-5">
           <div className="flex items-center gap-2">
             <CheckCircle className="h-5 w-5" />
-            <p>Thank you! We'll be in touch soon.</p>
+            <p>Thank you! We&apos;ll be in touch soon.</p>
           </div>
         </div>
       )}

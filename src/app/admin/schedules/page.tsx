@@ -1,10 +1,23 @@
 "use client"
 
-import { useState } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 
+// Material type definition
+type MaterialType = "Plastic" | "Paper" | "Metal" | "Glass" | "Organic" | "E-waste" | "Hazardous";
+
+// Schedule type definition
+type Schedule = {
+  id: number;
+  barangay: string;
+  material: MaterialType;
+  day: string;
+  time: string;
+  franchisee: string;
+  status: "active" | "inactive";
+}
+
 // Sample data
-const scheduleData = [
+const scheduleData: Schedule[] = [
   {
     id: 1,
     barangay: "Barangay 1",
@@ -52,26 +65,9 @@ const scheduleData = [
   },
 ]
 
-// Sample materials
-const materials = ["Plastic", "Paper", "Metal", "Glass", "Organic", "E-waste", "Hazardous"]
-
-// Sample barangays
-const barangays = ["Barangay 1", "Barangay 2", "Barangay 3", "Barangay 4", "Barangay 5"]
-
 export default function SchedulesPage() {
-  const [activeTab, setActiveTab] = useState("all")
-  const [showAddScheduleDialog, setShowAddScheduleDialog] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(new Date())
-
-  // Filter schedules based on active tab
-  const filteredSchedules = scheduleData.filter((schedule) => {
-    if (activeTab === "all") return true
-    if (activeTab === "active") return schedule.status === "active"
-    if (activeTab === "inactive") return schedule.status === "inactive"
-    return true
-  })
-
-  const getMaterialColor = (material: any) => {
+  // Function to get color based on material type
+  const getMaterialColor = (material: MaterialType): string => {
     switch (material) {
       case "Plastic":
         return "bg-blue-100 text-blue-800"
@@ -92,6 +88,25 @@ export default function SchedulesPage() {
     }
   }
 
+  // Group schedules by material type for summary display
+  const schedulesByMaterial: Record<string, { days: string[], times: string[] }> = {}
+  
+  scheduleData.forEach(schedule => {
+    if (schedule.status === "active") {
+      if (!schedulesByMaterial[schedule.material]) {
+        schedulesByMaterial[schedule.material] = { days: [], times: [] }
+      }
+      
+      if (!schedulesByMaterial[schedule.material].days.includes(schedule.day)) {
+        schedulesByMaterial[schedule.material].days.push(schedule.day)
+      }
+      
+      if (!schedulesByMaterial[schedule.material].times.includes(schedule.time)) {
+        schedulesByMaterial[schedule.material].times.push(schedule.time)
+      }
+    }
+  })
+
   return (
     <DashboardLayout role="admin" title="Schedule & Routes" subtitle="Manage collection schedules per material">
       <div className="bg-white rounded-lg shadow p-6">
@@ -100,24 +115,53 @@ export default function SchedulesPage() {
           Configure and manage waste collection schedules by material type and location.
         </p>
 
+        {/* Material summary cards */}
         <div className="border rounded-lg p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="font-medium mb-2">Plastic</h3>
-              <p className="text-sm text-gray-500">Monday, Wednesday</p>
-              <p className="text-sm text-gray-500">8:00 AM - 11:00 AM</p>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="font-medium mb-2">Paper</h3>
-              <p className="text-sm text-gray-500">Tuesday, Thursday</p>
-              <p className="text-sm text-gray-500">1:00 PM - 4:00 PM</p>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="font-medium mb-2">Metal</h3>
-              <p className="text-sm text-gray-500">Friday</p>
-              <p className="text-sm text-gray-500">9:00 AM - 12:00 PM</p>
-            </div>
+            {Object.entries(schedulesByMaterial).map(([material, info]) => (
+              <div key={material} className="bg-gray-50 p-4 rounded-md">
+                <h3 className="font-medium mb-2">{material}</h3>
+                <p className="text-sm text-gray-500">{info.days.join(", ")}</p>
+                <p className="text-sm text-gray-500">{info.times.join(", ")}</p>
+              </div>
+            ))}
           </div>
+        </div>
+
+        {/* Schedule table */}
+        <div className="overflow-x-auto mb-6">
+          <table className="min-w-full bg-white">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="py-2 px-4 text-left text-sm font-medium text-gray-500">Barangay</th>
+                <th className="py-2 px-4 text-left text-sm font-medium text-gray-500">Material</th>
+                <th className="py-2 px-4 text-left text-sm font-medium text-gray-500">Day</th>
+                <th className="py-2 px-4 text-left text-sm font-medium text-gray-500">Time</th>
+                <th className="py-2 px-4 text-left text-sm font-medium text-gray-500">Franchisee</th>
+                <th className="py-2 px-4 text-left text-sm font-medium text-gray-500">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {scheduleData.map((schedule) => (
+                <tr key={schedule.id}>
+                  <td className="py-2 px-4 text-sm">{schedule.barangay}</td>
+                  <td className="py-2 px-4">
+                    <span className={`inline-flex px-2 py-1 text-xs rounded-full ${getMaterialColor(schedule.material)}`}>
+                      {schedule.material}
+                    </span>
+                  </td>
+                  <td className="py-2 px-4 text-sm">{schedule.day}</td>
+                  <td className="py-2 px-4 text-sm">{schedule.time}</td>
+                  <td className="py-2 px-4 text-sm">{schedule.franchisee}</td>
+                  <td className="py-2 px-4 text-sm">
+                    <span className={`inline-flex px-2 py-1 text-xs rounded-full ${schedule.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {schedule.status === 'active' ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <div className="flex justify-end">

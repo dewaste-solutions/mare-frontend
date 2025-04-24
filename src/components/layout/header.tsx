@@ -1,6 +1,6 @@
 "use client"
-import Link from "next/link"
-import { Menu, Recycle, Search, LogOut, Settings, User } from "lucide-react"
+
+import { Menu, Search, LogOut, Settings, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -15,26 +15,29 @@ import {
 
 import { NotificationsDropdown } from "@/components/notifications-dropdown"
 
+// Match the Notification interface from notifications-dropdown.tsx
+interface Notification {
+  id: number
+  title: string
+  description: string
+  time: string
+  read: boolean
+}
+
 interface HeaderProps {
   toggleNavigation: () => void
-  showMobileNav: boolean
-  setShowMobileNav: (show: boolean) => void
+  showSearch?: boolean
   searchQuery?: string
   setSearchQuery?: (query: string) => void
-  notifications?: any[]
-  showSearch?: boolean
-  showSidebar?: boolean
+  notifications?: Notification[]
 }
 
 export function Header({
   toggleNavigation,
-  showMobileNav,
-  setShowMobileNav,
   searchQuery = "",
   setSearchQuery,
   notifications = [],
   showSearch = true,
-  showSidebar = true,
 }: HeaderProps) {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -105,4 +108,3 @@ export function Header({
     </header>
   )
 }
-

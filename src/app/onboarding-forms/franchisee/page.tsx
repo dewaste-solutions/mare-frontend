@@ -25,13 +25,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select"
 
 import { useToast } from "@/components/ui/use-toast"
 import { ToastProvider } from "@/components/ui/toast"
@@ -260,9 +253,11 @@ export default function FranchiseeApplicationPage() {
                 </div>
                 <h2 className="text-2xl font-bold text-[#026853] mb-4">Application Submitted Successfully!</h2>
                 <p className="text-gray-600 mb-6">
-                  Salamat sa iyong interes na maging MARE! franchisee. We've received your application and will
+                  Salamat sa iyong interes na maging MARE! franchisee. We&apos;ve received your application and will
                   review it shortly. A member of our team will contact you within 3-5 business days.
                 </p>
+
+
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     variant="outline"

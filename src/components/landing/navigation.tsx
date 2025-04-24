@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, Recycle, ChevronLeft } from "lucide-react"
+import Image from 'next/image';
+import { Menu, ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -36,8 +37,7 @@ export function Navigation({ activeSection, scrollToSection, isLandingPage = tru
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled ? "bg-white/95 shadow-md" : "bg-white/80"} backdrop-blur-md`}
     >
       <div className="container flex h-16 items-center justify-between">
-        <img src="/logo.svg" alt="MARE! Logo" className="h-10" />
-
+        <Image src="/logo.svg" alt="MARE! Logo" width={40} height={40} className="h-10" />
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6">
