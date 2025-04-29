@@ -61,7 +61,7 @@ export function CommunitySection({ onLearnMore }: CommunitySectionProps) {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <Badge className="mb-4 bg-[#e6f3f1] text-[#026853] hover:bg-[#d1ebe7]">Our People</Badge>
+          <Badge className="mb-4 bg-[#FFC539]/20 text-[#FFC539] hover:bg-[#d1ebe7]">Our People</Badge>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 bg-gradient-to-r from-[#026853] to-[#038167] bg-clip-text text-transparent">
             Our Community
           </h2>
@@ -87,9 +87,10 @@ export function CommunitySection({ onLearnMore }: CommunitySectionProps) {
                 <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-[#e6f3f1] hover:border-[#d1ebe7]">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#e6f3f1] to-[#f5faf9] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <CardContent className="pt-6 relative z-10">
-                    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#038167] to-[#026853] text-white shadow-lg group-hover:shadow-[#038167]/20 transition-all">
-                      <Icon className="h-7 w-7" />
-                    </div>
+                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-[#F69C91] text-white shadow-lg group-hover:shadow-[#F69C91]/20 transition-all">
+                    <Icon className="h-7 w-7" />
+                  </div>
+
                     <h3 className="text-xl font-bold mb-3 text-[#026853] group-hover:text-[#038167] transition-colors">
                       {type.title}
                     </h3>
@@ -127,7 +128,42 @@ export function CommunitySection({ onLearnMore }: CommunitySectionProps) {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#e6f3f1] rounded-full translate-y-1/2 -translate-x-1/2 opacity-50"></div>
 
             <div className="relative z-10">
-              <div className="flex justify-center mb-8">
+              <div className="relative min-h-[260px]">
+                {testimonials.map((testimonial, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{
+                      opacity: currentTestimonial === i ? 1 : 0,
+                      x: currentTestimonial === i ? 0 : 20,
+                      position: currentTestimonial === i ? "relative" : "absolute",
+                    }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center absolute inset-0 flex flex-col items-center justify-center space-y-4"
+                    style={{ display: Math.abs(currentTestimonial - i) > 1 ? "none" : "flex" }}
+                  >
+                    {/* Avatar and Name */}
+                    <div className="flex flex-col items-center mb-2">
+                      <Avatar className="h-20 w-20 border-4 border-[#e6f3f1] mb-2">
+                        <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Community member" />
+                        <AvatarFallback className="bg-[#038167] text-white text-xl">
+                          {testimonial.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <h4 className="text-xl font-bold text-[#026853]">{testimonial.name}</h4>
+                      <p className="text-sm text-gray-500">{testimonial.location}</p>
+                    </div>
+
+                    {/* Quote */}
+                    <p className="text-lg text-gray-700 italic max-w-2xl mx-auto px-4">
+                      &ldquo;{testimonial.quote}&rdquo;
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Navigation Arrows & Dots */}
+              <div className="flex justify-center mt-10">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() =>
@@ -141,7 +177,9 @@ export function CommunitySection({ onLearnMore }: CommunitySectionProps) {
                     {testimonials.map((_, i) => (
                       <div
                         key={i}
-                        className={`h-2 w-2 rounded-full mx-1 transition-colors ${currentTestimonial === i ? "bg-[#038167]" : "bg-[#e6f3f1]"}`}
+                        className={`h-2 w-2 rounded-full mx-1 transition-colors ${
+                          currentTestimonial === i ? "bg-[#038167]" : "bg-[#e6f3f1]"
+                        }`}
                         onClick={() => setCurrentTestimonial(i)}
                       ></div>
                     ))}
@@ -154,43 +192,10 @@ export function CommunitySection({ onLearnMore }: CommunitySectionProps) {
                   </button>
                 </div>
               </div>
-
-              <div className="relative h-[200px]">
-                {testimonials.map((testimonial, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{
-                      opacity: currentTestimonial === i ? 1 : 0,
-                      x: currentTestimonial === i ? 0 : 20,
-                      position: currentTestimonial === i ? "relative" : "absolute",
-                    }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center absolute inset-0"
-                    style={{ display: Math.abs(currentTestimonial - i) > 1 ? "none" : "block" }}
-                  >
-                    <div className="flex justify-center mb-6">
-                      <Avatar className="h-20 w-20 border-4 border-[#e6f3f1]">
-                        <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Community member" />
-                        <AvatarFallback className="bg-[#038167] text-white text-xl">
-                          {testimonial.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                    <div className="mb-6">
-                      <h4 className="text-xl font-bold text-[#026853]">{testimonial.name}</h4>
-                      <p className="text-sm text-gray-500">{testimonial.location}</p>
-                    </div>
-                    <p className="text-lg text-gray-700 italic max-w-2xl mx-auto">
-                      &ldquo;{testimonial.quote}&rdquo;
-                    </p>
-
-                  </motion.div>
-                ))}
-              </div>
             </div>
           </div>
         </motion.div>
+
       </div>
     </section>
   )

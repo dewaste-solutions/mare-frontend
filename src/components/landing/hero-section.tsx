@@ -14,13 +14,23 @@ interface HeroSectionProps {
   onMeetTeam: () => void;
 }
 
+// Define a proper type for circle objects
+interface Circle {
+  top: string;
+  left: string;
+  width: string;
+  height: string;
+  opacity: number;
+  animation: string;
+}
+
 export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
-  // State for storing floating circle styles
-  const [circles, setCircles] = useState<any[]>([]);
+  // State for storing floating circle styles with proper type
+  const [circles, setCircles] = useState<Circle[]>([]);
 
   useEffect(() => {
     // Generate circles after component mounts
-    const generatedCircles = Array.from({ length: 20 }).map(() => ({
+    const generatedCircles: Circle[] = Array.from({ length: 20 }).map(() => ({
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
       width: `${Math.random() * 10 + 5}px`,
@@ -63,14 +73,14 @@ export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
           transition={{ duration: 0.8 }}
           className="text-white"
         >
-          <Badge className="mb-4 bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm">
+          <Badge className="mb-4 bg-[#FFC539] text-[#038167] hover:bg-[#ffb800] backdrop-blur-sm">
             Transforming Communities
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
             <span className="block">MARE!</span>
-            <span className="block text-[#a3e0d6]">Community</span>
+            <span className="block text-[#FFC539]">Community</span>
           </h1>
-          <div className="w-20 h-1.5 bg-[#a3e0d6] rounded-full mb-6"></div>
+          <div className="w-40 h-1.5 bg-[#F69C91] rounded-full mb-6"></div>
           <p className="text-xl md:text-2xl mb-4 text-[#e6f3f1]">People-powered materials recovery</p>
           <p className="text-lg mb-8 text-white/80 max-w-lg">
             Join our growing network of communities and workers transforming waste management across the Philippines.
@@ -86,31 +96,33 @@ export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
             </Button>
             <Button
               size="lg"
-              variant="outline"
-              className="text-white border-white/40 hover:bg-white/10 backdrop-blur-sm"
+              variant="ghost"
+              className="text-white border border-white/60 hover:bg-white/10 backdrop-blur-sm"
               onClick={onMeetTeam}
             >
               Meet Our Team
             </Button>
           </div>
+           
+
 
           <div className="mt-12 flex items-center gap-4">
             <div className="flex -space-x-3">
-              <Avatar className="border-2 border-white h-10 w-10">
-                <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Community member" />
+            <Avatar className="border-2 border-white h-10 w-10">
+                <AvatarImage src="profiles/profile-1.png?height=40&width=40" alt="Community member" />
                 <AvatarFallback>CM</AvatarFallback>
               </Avatar>
               <Avatar className="border-2 border-white h-10 w-10">
-                <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Community member" />
+                <AvatarImage src="profiles/profile-2.png?height=40&width=40" alt="Community member" />
                 <AvatarFallback>CM</AvatarFallback>
               </Avatar>
               <Avatar className="border-2 border-white h-10 w-10">
-                <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Community member" />
+                <AvatarImage src="profiles/profile-3.png?height=40&width=40" alt="Community member" />
                 <AvatarFallback>CM</AvatarFallback>
               </Avatar>
             </div>
             <div className="text-sm">
-              <span className="text-[#a3e0d6] font-semibold">1,000+ community members</span>
+              <span className="text-[#FFC539] font-semibold">1,000+ community members</span>
               <span className="block text-white/70">already joined</span>
             </div>
           </div>
@@ -124,7 +136,7 @@ export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
         >
           <div className="relative h-[450px] w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20">
             <Image
-              src="/placeholder.svg?height=450&width=600"
+              src="/images/IMG_7610.png?height=450&width=600"
               alt="MARE! community members working together"
               fill
               className="object-cover"
@@ -133,22 +145,22 @@ export function HeroSection({ onJoinCommunity, onMeetTeam }: HeroSectionProps) {
           </div>
           <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-xl">
             <div className="flex items-center gap-3">
-              <div className="bg-[#e6f3f1] p-2 rounded-full">
-                <Recycle className="h-6 w-6 text-[#038167]" />
+              <div className="bg-[#F69C91]/25 p-2 rounded-full">
+                <Recycle className="h-6 w-6 text-[#F69C91]" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-gray-800">85% Waste Diversion</p>
+                <p className="text-sm font-semibold text-[#F69C91]">85% Waste Diversion</p>
                 <p className="text-xs text-gray-500">Achieved in our communities</p>
               </div>
             </div>
           </div>
           <div className="absolute -top-6 -right-6 bg-white p-4 rounded-lg shadow-xl">
             <div className="flex items-center gap-3">
-              <div className="bg-[#e6f3f1] p-2 rounded-full">
-                <Users className="h-6 w-6 text-[#038167]" />
+              <div className="bg-[#FFC539]/20 p-2 rounded-full">
+                <Users className="h-6 w-6 text-[#FFC539]" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-gray-800">50+ Local Jobs</p>
+                <p className="text-sm font-semibold text-[#FFC539]">50+ Local Jobs</p>
                 <p className="text-xs text-gray-500">Created and growing</p>
               </div>
             </div>

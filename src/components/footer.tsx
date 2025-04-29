@@ -15,7 +15,6 @@ type FooterProps = {
 
 export default function Footer({ scrollToSection }: FooterProps) {
   const [newsletterEmail, setNewsletterEmail] = useState("")
-  const [showThankYouToast, setShowThankYouToast] = useState(false)
   const pathname = usePathname()
 
   // Check if user is on dashboard or admin pages
@@ -26,8 +25,6 @@ export default function Footer({ scrollToSection }: FooterProps) {
     e.preventDefault()
     console.log("Newsletter subscription for:", newsletterEmail)
     setNewsletterEmail("")
-    setShowThankYouToast(true)
-    setTimeout(() => setShowThankYouToast(false), 3000)
   }
 
   // Simplified footer for admin pages

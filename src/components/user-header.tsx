@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Calendar, Users, ArrowRight, Bell } from "lucide-react"
+import { Users, ArrowRight, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -25,40 +25,6 @@ export function UserHeader({ role }: UserHeaderProps) {
   const [currentRole, setCurrentRole] = useState<UserRole>(role)
   const router = useRouter()
   const { toast } = useToast()
-
-  // Update the handleRoleSwitch function to use the new folder structure
-  const handleRoleSwitch = (newRole: UserRole) => {
-    if (newRole === currentRole) return
-
-    setCurrentRole(newRole)
-
-    // Store the role in localStorage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("mare-user-role", newRole)
-    }
-
-    // Show toast notification
-    toast({
-      title: "Role Switched",
-      description: `You are now viewing as ${newRole.replace("-", " ")}.`,
-      duration: 3000,
-    })
-
-    // Redirect to the appropriate dashboard
-    switch (newRole) {
-      case "franchisee":
-        router.push("/franchisee/dashboard")
-        break
-      case "community-officer":
-        router.push("/community-officer/dashboard")
-        break
-      case "admin":
-        router.push("/admin/dashboard")
-        break
-      default:
-        router.push("/dashboard")
-    }
-  }
 
   const getUserInitials = () => {
     switch (role) {
@@ -111,7 +77,26 @@ export function UserHeader({ role }: UserHeaderProps) {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => router.push(`/${role}/profile`)}>
+          <DropdownMenuItem 
+            onClick={() => {
+              if (currentRole !== role) {
+                setCurrentRole(role)
+                
+                // Store the role in localStorage
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("mare-user-role", role)
+                }
+                
+                // Show toast notification
+                toast({
+                  title: "Role Switched",
+                  description: `You are now viewing as ${role.replace("-", " ")}.`,
+                  duration: 3000,
+                })
+              }
+              router.push(`/${role}/profile`)
+            }}
+          >
             <Users className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </DropdownMenuItem>

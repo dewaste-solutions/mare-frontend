@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog"
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden" 
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Mail, Phone, MapPin, Calendar, Linkedin, Twitter } from "lucide-react"

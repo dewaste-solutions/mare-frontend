@@ -3,13 +3,23 @@
 import type React from "react"
 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden" 
 import { Button } from "@/components/ui/button"
+
+// Create a proper type for the invite object
+interface Invite {
+  name: string
+  email: string
+  role: string
+  location: string
+  date?: string
+  dateInvited?: string
+  status: string
+}
 
 interface InviteDetailsModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  invite: any
+  invite: Invite
   onAccept?: () => void
   onDecline?: () => void
   onCancel: () => void
@@ -25,7 +35,6 @@ export function InviteDetailsModal({
   onDecline,
   onCancel,
   getStatusBadge,
-  getStatusIcon,
 }: InviteDetailsModalProps) {
   const isPending = invite.status === "Submitted" || invite.status === "pending"
 

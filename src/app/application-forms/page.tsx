@@ -32,8 +32,9 @@ export default function JoinCommunityPage() {
             </div>
             <h1 className="text-3xl font-bold text-[#026853] mb-4">Thank You!</h1>
             <p className="text-lg text-gray-700 mb-8">
-              Your application to join the MARE! community has been received. We'll be in touch with you shortly.
+              Your application to join the MARE! community has been received. We&apos;ll be in touch with you shortly.
             </p>
+
             <Link href="/">
               <Button className="bg-gradient-to-r from-[#038167] to-[#026853] hover:from-[#026853] hover:to-[#01574a] text-white">
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -136,9 +137,10 @@ export default function JoinCommunityPage() {
               <div className="flex items-start space-x-2">
                 <Checkbox id="terms" required />
                 <div className="grid gap-1.5 leading-none">
-                  <label htmlFor="terms" className="text-sm text-gray-600 leading-tight">
-                    I agree to MARE!'s Terms of Service and Privacy Policy
-                  </label>
+                <label htmlFor="terms" className="text-sm text-gray-600 leading-tight">
+                  I agree to MARE!&apos;s Terms of Service and Privacy Policy
+                </label>
+
                 </div>
               </div>
 

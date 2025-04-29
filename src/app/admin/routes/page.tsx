@@ -68,18 +68,7 @@ const routesData = [
 export default function AdminRoutesPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "text-green-500"
-      case "in-progress":
-        return "text-blue-500"
-      case "scheduled":
-        return "text-yellow-500"
-      default:
-        return "text-gray-500"
-    }
-  }
+
 
   const getStatusBadge = (status: string) => {
     switch (status) {

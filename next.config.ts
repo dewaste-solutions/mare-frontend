@@ -1,4 +1,5 @@
-import type { NextConfig } from "next";
+// next.config.ts
+import { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
 
@@ -11,6 +12,9 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  images: {
+    domains: ['your-image-source.com'], // replace this with the actual image domain
+  },
 };
 
-export default nextConfig;
+export default nextConfig
