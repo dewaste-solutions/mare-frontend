@@ -5,13 +5,14 @@ import type React from "react"
 import { useState } from "react"
 import { FileUp } from "lucide-react"
 
-export const FileUpload = () => {
+export const FileUpload = ({ onFileUpload }: { onFileUpload?: (file: File) => void }) => {
     const [fileName, setFileName] = useState<string | null>(null)
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {
             setFileName(file.name)
+            if (onFileUpload) onFileUpload(file)
         } else {
             setFileName(null)
         }

@@ -42,29 +42,71 @@ export default function LoginPage() {
         return
       }
 
-      // Determine role based on email (temporary hardcoded credentials)
-      let role = "community-officer" // default role
+      //get a one-time token
+      const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/get-one-time-token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+        }),
+        credentials: "include",
+      })
 
-      if (formData.email === "admin@mare.com") {
-        role = "admin"
-      } else if (formData.email === "franchisee@mare.com") {
-        role = "franchisee"
-      } else if (formData.email === "officer@mare.com") {
-        role = "community-officer"
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Invalid credentials",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
+      if (!tokenResponse.ok) {
+        throw new Error("Failed to get one-time token")
       }
 
-      // Store user role in localStorage (for demo purposes)
-      if (typeof window !== "undefined") {
-        localStorage.setItem("mare-user-role", role)
-        localStorage.setItem("mare-user-email", formData.email)
+      const { oneTimeToken } = await tokenResponse.json()
+
+      // Make API call to backend for authentication using the one-time token
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-One-Time-Token": oneTimeToken,
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+        credentials: "include",
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || "Authentication failed")
+      }
+
+      const data = await response.json()
+
+      // Store the access token securely
+      if (typeof window !== "undefined" && data.accessToken) {
+        // Store token in localStorage 
+        localStorage.setItem("mare-access-token", data.accessToken)
+
+        // Get user profile using the one-time token
+        const profileResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${data.accessToken}`,
+              "X-One-Time-Token": oneTimeToken,
+            },
+            credentials: "include",
+          },
+        )
+
+        if (!profileResponse.ok) {
+          throw new Error("Failed to fetch user profile")
+        }
+
+        const profileData = await profileResponse.json()
+
+        // Store user role and email
+        localStorage.setItem("mare-user-role", profileData.roleName)
+        localStorage.setItem("mare-user-email", profileData.email)
       }
 
       // Show success message
@@ -72,6 +114,9 @@ export default function LoginPage() {
         title: "Login successful",
         description: "Redirecting to dashboard...",
       })
+
+      // Determine role from profile data and redirect accordingly
+      const role = localStorage.getItem("mare-user-role")
 
       // Redirect to appropriate dashboard based on role
       setTimeout(() => {
@@ -87,7 +132,7 @@ export default function LoginPage() {
       console.error("Login error:", error)
       toast({
         title: "Login failed",
-        description: "An unexpected error occurred",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
         variant: "destructive",
       })
     } finally {
@@ -172,7 +217,7 @@ export default function LoginPage() {
             </form>
             <div className="mt-4 text-xs text-gray-500 p-3 bg-gray-50 rounded-md">
               <p className="font-medium mb-1">Demo Credentials:</p>
-              <p>Admin: admin@mare.com / password</p>
+              <p>Admin: admin@example.com / admin</p>
               <p>Franchisee: franchisee@mare.com / password</p>
               <p>Community Officer: officer@mare.com / password</p>
             </div>

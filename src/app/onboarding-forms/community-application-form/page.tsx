@@ -156,7 +156,7 @@ function SectionCard({
                     {title}
                 </h3>
             </div>
-            <div className="p-4 rounded-lg">{children}</div> {/* Removed bg-white */}
+            <div className="p-4 rounded-lg">{children}</div>
         </div>
     )
 }
