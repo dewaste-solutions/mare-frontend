@@ -30,6 +30,7 @@ We're going to use this [Feature-Based structure](https://dev.to/sathishskdev/pa
 - `src/feature/<router-name>/types` - Type definitions for the page
 - `src/feature/<router-name>/utils` - Utility functions for the page
 - `src/feature/<router-name>/hooks` - Hooks for the page
+- `src/feature/<router-name>/action` - Server Action for the page
 
 ### Shared (only use this folder if the function use twice in different pages)
 
@@ -44,12 +45,13 @@ We're going to use this [Feature-Based structure](https://dev.to/sathishskdev/pa
   - `src/shared/types` - Shared types.
   - `src/shared/utils` - Shared utilities.
   - `src/feature/<router-name>/hooks` - Hooks for the page
+  - `src/feature/<router-name>/action` - Server Action for the page
 
 ---
 ## notes
 - Always run `npm run biome:write` (not necessarily after every change, but always before pushing to GitHub)
   - This ensures you catch errors early before GitHub Actions run.
-- client component will render once in server\
+- client component will render once in server
 - Don't put "use client" in `page.tsx`, it's ideally for components.
 - margin
   - [Margin considered harmful](https://mxstbr.com/thoughts/margin)
