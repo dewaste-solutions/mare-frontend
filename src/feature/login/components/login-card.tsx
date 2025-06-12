@@ -43,9 +43,6 @@ export default function LoginCard() {
 
 			await signIn(formData);
 
-			// Show success toast and wait for animation
-			toast.success("Successfully signed in");
-
 			router.push("/dashboard");
 		} catch (_error) {
 			// Error toast is already handled in useAuth
