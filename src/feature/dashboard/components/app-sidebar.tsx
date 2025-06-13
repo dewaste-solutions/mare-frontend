@@ -16,12 +16,14 @@ import { Skeleton } from "@/shared/components/shadcn/ui/skeleton";
 import { useAuth } from "@/shared/hooks/use-auth";
 import { GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { MENU_ITEMS, ROLE_PERMISSIONS } from "../constant/sidebar";
 import { NavFooter } from "./nav-footer";
 
 export function AppSidebar() {
-	const { user } = useAuth();
-
+	const router = useRouter();
+	const { user, signOut } = useAuth();
 	const { state } = useSidebar();
 
 	const getMenuItems = () => {
@@ -29,6 +31,19 @@ export function AppSidebar() {
 		const allowedItems = ROLE_PERMISSIONS[user.roleName.toLowerCase()] || [];
 		return MENU_ITEMS.filter((item) => allowedItems.includes(item.id));
 	};
+
+	// this effect will handle when the user manually remove access token in localstorage, it will force logout
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		const accessToken = localStorage.getItem("accessToken");
+		const currentPath = window.location.pathname;
+
+		const isInDashboard = currentPath.includes("/dashboard");
+		if (accessToken === null && isInDashboard) {
+			signOut();
+			router.push("/");
+		}
+	}, []);
 
 	return (
 		<Sidebar collapsible="icon" className="py-2">

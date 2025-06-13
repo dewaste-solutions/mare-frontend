@@ -40,6 +40,7 @@ export function NavFooter({
 			} catch (_error) {}
 		};
 		initSignout();
+		router.push("/");
 	};
 
 	const gotoSetting = () => {

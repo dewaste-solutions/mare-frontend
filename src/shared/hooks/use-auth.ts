@@ -100,16 +100,11 @@ export const useAuth = () => {
 			removeAuthInterceptor();
 
 			toast.success("Successfully signed out");
-			router.push("/login");
 		} catch (_error) {
-			localStorage.removeItem("accessToken");
-			clearUser();
-			removeAuthInterceptor();
 			toast.error("Error signing out");
 		} finally {
 			await new Promise((resolve) => setTimeout(resolve, 500));
 			setIsSigningOut(false);
-			router.push("/login");
 		}
 	};
 
@@ -135,9 +130,8 @@ export const useAuth = () => {
 		// this function will run when auth-interceptors got 401 then try again but still failed
 		const handleSessionExpired = async () => {
 			toast.error("Session expired. Please login again.");
-			// console.log('logout')
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			signOut();
+			await signOut();
+			router.push("login");
 		};
 
 		window.addEventListener(AUTH_EVENTS.SESSION_EXPIRED, handleSessionExpired);
