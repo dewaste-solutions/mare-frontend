@@ -1,0 +1,4 @@
+- missing robot.txt
+- missing sitemap.xml
+- Partial Pre-rendering (experimental)
+    - https://nextjs.org/docs/app/building-your-application/rendering/partial-prerendering
